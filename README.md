@@ -15,6 +15,6 @@ Codenames is a 2015 card game for 4–8 players designed by Vlaada Chvátil and 
 In 2016 Codenames won the Spiel des Jahres award for the best board game of the year.
 
 ## Authors
-@industriousparadigm and @idanceinbetween from Inglorious BA$Hterds (aka 031119 cohort), Flatiron School.
+Diogo Costa (@industriousparadigm) and JiaXuan Hon (@idanceinbetween) from Inglorious BA$Hterds (aka 031119 cohort), Flatiron School, London.
 
 ![CodeNamesMeme](https://i.ibb.co/0Mhr4sw/Image-from-i-OS.jpg)
