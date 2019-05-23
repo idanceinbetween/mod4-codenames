@@ -1,2 +1,2 @@
 # mod4-codenames
-![CodeNamesMeme]("https://i.ibb.co/0Mhr4sw/Image-from-i-OS.jpg" alt="Image-from-i-OS" border="0")
+![CodeNamesMeme]("https://i.ibb.co/0Mhr4sw/Image-from-i-OS.jpg")
