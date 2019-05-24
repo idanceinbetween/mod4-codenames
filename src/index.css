@@ -11,3 +11,66 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+#game-board {
+  display: grid;
+  grid-template-columns: 2fr 2fr 2fr 2fr 2fr;
+}
+
+.word-box {
+  margin: 20px;
+  position: relative;
+  margin-bottom: 10px;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.15);
+  padding: 20px;
+  border-radius: 5px;
+}
+
+.word-text {
+  font-family: cambria;
+  text-align: center;
+}
+
+.word-box:hover {
+  /*box-shadow: 0 5px 22px 0 rgba(0,0,0,.25);*/
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+}
+
+.cards.ui .card {
+  background-image: url("pix/manonPeteSmall.jpg");
+  background-size: 100%;
+  height: 10vh;
+}
+
+.cnWord {
+  color: white;
+}
+
+.ui.header {
+  /* border: none;
+  margin: calc(2rem -  0.14285714em ) 0em 1rem;
+  padding: 0em 0em;
+  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-weight: bold;
+  line-height: 1.28571429em;
+  text-transform: none; */
+  color: rgba(250, 250, 250, 0.87);
+}
+
+.card,
+.blue {
+  background-image: url("pix/guyAzam.jpg");
+  background-size: 100%;
+}
+
+.card,
+.white {
+  background-image: url("pix/jxMoses.jpg");
+  background-size: 100%;
+}
+
+.card,
+.black {
+  background-image: url("pix/peteAssassin.jpg");
+  background-size: 100%;
+}
