@@ -54,7 +54,6 @@ class GameContainer extends Component {
   setTeam = () => {
     const blueWords = DATA.filter(w => w.color === "b");
     const redWords = DATA.filter(w => w.color === "r");
-    debugger;
     blueWords.length > redWords.length
       ? this.setState({ activeTeam: "blue" })
       : this.setState({ activeTeam: "red" });
