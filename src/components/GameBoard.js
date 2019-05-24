@@ -3,7 +3,15 @@ import React from "react";
 import { Card } from "semantic-ui-react";
 import WordCard from "./WordCard";
 
-const mapWordsWithColors = words => words.map(word => <WordCard word={word} />);
+const mapWordsWithColors = words => {
+  return (
+    <Card.Group itemsPerRow={5}>
+      {words.map(word => (
+        <WordCard word={word} />
+      ))}
+    </Card.Group>
+  );
+};
 
 const mapWordsNoColors = words => {
   const newArray = words.map(word => {
@@ -11,7 +19,13 @@ const mapWordsNoColors = words => {
     return word;
   });
 
-  return newArray.map(word => <WordCard word={word} />);
+  return (
+    <Card.Group itemsPerRow={5}>
+      {newArray.map(word => (
+        <WordCard word={word} />
+      ))}
+    </Card.Group>
+  );
 };
 
 const GameBoard = props => {

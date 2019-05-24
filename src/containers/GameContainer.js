@@ -14,7 +14,7 @@ class GameContainer extends Component {
   state = {
     words: [],
     scores: [{ color: "red", score: 0 }, { color: "blue", score: 0 }],
-    spymasterView: true //as soon as it is false, color key/value pair in each word disappears. Does not come back if switches back on.
+    spymasterView: false //as soon as it is false, color key/value pair in each word disappears. Does not come back if switches back on.
   };
 
   getWords = () => {
