@@ -3,7 +3,7 @@ import { Route, Switch } from "react-router-dom";
 
 import About from "../components/About";
 import Home from "../components/Home";
-import MainGame from "./MainGame";
+import GameContainer from "./GameContainer";
 
 class MainCanvas extends Component {
   state = {};
@@ -12,7 +12,7 @@ class MainCanvas extends Component {
       <div>
         <Switch>
           <Route exact path="/" render={Home} />
-          <Route exact path="/games/new" render={MainGame} />
+          <Route exact path="/games" component={GameContainer} />
           <Route exact path="/about" render={About} />
           <Route
             component={() => (

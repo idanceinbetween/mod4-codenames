@@ -16,7 +16,7 @@ const NavBar = () => (
         Home
       </Link>
       |
-      <Link to="/games/new" exact>
+      <Link to="/games" exact>
         Games
       </Link>
       |

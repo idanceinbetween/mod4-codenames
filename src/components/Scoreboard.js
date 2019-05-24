@@ -1,7 +1,7 @@
 import React from "react";
 import { Header, Image, Table } from "semantic-ui-react";
 
-const Scoreboard = () => (
+const Scoreboard = props => (
   <Table basic="very" celled collapsing>
     <Table.Header>
       <Table.Row>
@@ -21,7 +21,9 @@ const Scoreboard = () => (
             <Header.Content>Red</Header.Content>
           </Header>
         </Table.Cell>
-        <Table.Cell>3</Table.Cell>
+        <Table.Cell>
+          {props.scores.find(o => o.color === "red").score}
+        </Table.Cell>
       </Table.Row>
       <Table.Row>
         <Table.Cell>
@@ -34,7 +36,9 @@ const Scoreboard = () => (
             <Header.Content>Blue</Header.Content>
           </Header>
         </Table.Cell>
-        <Table.Cell>5</Table.Cell>
+        <Table.Cell>
+          {props.scores.find(o => o.color === "blue").score}
+        </Table.Cell>
       </Table.Row>
     </Table.Body>
   </Table>
