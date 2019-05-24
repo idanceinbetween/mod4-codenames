@@ -5,32 +5,52 @@ import GameBoard from "../components/GameBoard";
 import Scoreboard from "../components/Scoreboard";
 import Timer from "../components/Timer";
 import Clue from "../components/Clue";
-// import { mixedTypeAnnotation } from "@babel/types";
 
 // const randomWords = require("random-words");
 // const baseUrl = "localhost:3007";
 // const wordsUrl = baseUrl + "/start";
 
+const DATA = [
+  { id: 1, word: "phoenix", color: "r" },
+  { id: 2, word: "ocean", color: "b" },
+  { id: 3, word: "washington", color: "a" },
+  { id: 4, word: "wallet", color: "y" },
+  { id: 5, word: "slug", color: "b" }
+];
+
+const SERVERDATA = [
+  { id: 1, word: "phoenix", color: "r" },
+  { id: 2, word: "ocean", color: "b" },
+  { id: 3, word: "washington", color: "a" },
+  { id: 4, word: "wallet", color: "y" },
+  { id: 5, word: "slug", color: "b" }
+];
+
+const colorCodes = {
+  b: "blue",
+  r: "red",
+  y: "yellow",
+  a: "assassin"
+};
+
+const swapTeam = {
+  blue: "red",
+  red: "blue"
+};
+
 class GameContainer extends Component {
   state = {
     words: [],
-    scores: [{ color: "red", score: 0 }, { color: "blue", score: 0 }],
-    spymasterView: true, //as soon as it is false, color key/value pair in each word disappears. Does not come back if switches back on.
+    scores: { red: 0, blue: 0 },
+    spymasterView: true,
     clue: { numberClue: null, textClue: null },
     guesses: 1,
-    activeTeam: null
+    activeTeam: "blue"
   };
 
   getWords = () => {
     // const words = randomWords({ exactly: 25, maxLength: 15 });
-    const words = [
-      { id: 1, word: "phoenix", color: "r" },
-      { id: 2, word: "ocean", color: "b" },
-      { id: 3, word: "washington", color: "a" },
-      { id: 4, word: "wallet", color: "y" },
-      { id: 5, word: "slug", color: "b" }
-    ];
-    this.setState({ words });
+    this.setState({ words: DATA });
     console.log(`get words from server and put in state`);
   };
 
@@ -64,20 +84,43 @@ class GameContainer extends Component {
     console.log(`Spymaster's View Restored!`);
   };
 
-  addScore = () => {};
+  addScore = () => {
+    const score = this.state.scores[this.state.activeTeam] + 1;
+    this.setState({
+      scores: { ...this.state.scores, [this.state.activeTeam]: score }
+    });
+  };
+
+  findWordOnServer = word => SERVERDATA.find(w => w.id === word.id);
 
   checkHit = word => {
-    return console.log(`${word} is being checked on server`);
-    //if correct, this.addScore
+    const result = this.findWordOnServer(word);
+
+    switch (colorCodes[result.color]) {
+      case this.state.activeTeam:
+        this.addScore();
+        break;
+      case "assassin":
+        console.log("you've hit assassin");
+        break;
+      default:
+        console.log("wrong guess");
+    }
+  };
+
+  swapTeam = () => {
+    const team = this.state.activeTeam;
+    this.setState({ activeTeam: swapTeam[team] });
   };
 
   handleCardSelect = word => {
     this.increaseGuesses();
     if (this.state.guesses === parseInt(this.state.clue["numberClue"], 10)) {
-      this.checkHit(word.word);
+      this.checkHit(word);
+      this.swapTeam();
       this.restoreSpymasterView();
     } else {
-      this.checkHit(word.word);
+      this.checkHit(word);
     }
   };
 

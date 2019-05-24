@@ -21,9 +21,7 @@ const Scoreboard = props => (
             <Header.Content>Red</Header.Content>
           </Header>
         </Table.Cell>
-        <Table.Cell>
-          {props.scores.find(o => o.color === "red").score}
-        </Table.Cell>
+        <Table.Cell>{props.scores.red}</Table.Cell>
       </Table.Row>
       <Table.Row>
         <Table.Cell>
@@ -36,9 +34,7 @@ const Scoreboard = props => (
             <Header.Content>Blue</Header.Content>
           </Header>
         </Table.Cell>
-        <Table.Cell>
-          {props.scores.find(o => o.color === "blue").score}
-        </Table.Cell>
+        <Table.Cell>{props.scores.blue}</Table.Cell>
       </Table.Row>
     </Table.Body>
   </Table>
