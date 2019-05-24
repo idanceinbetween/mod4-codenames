@@ -5,6 +5,7 @@ import GameBoard from "../components/GameBoard";
 import Scoreboard from "../components/Scoreboard";
 import Timer from "../components/Timer";
 import Clue from "../components/Clue";
+import { mixedTypeAnnotation } from "@babel/types";
 
 // const randomWords = require("random-words");
 const baseUrl = "localhost:3007";
@@ -15,7 +16,8 @@ class GameContainer extends Component {
     words: [],
     scores: [{ color: "red", score: 0 }, { color: "blue", score: 0 }],
     spymasterView: true, //as soon as it is false, color key/value pair in each word disappears. Does not come back if switches back on.
-    clue: { numberClue: null, textClue: null }
+    clue: { numberClue: null, textClue: null },
+    guesses: 1
   };
 
   getWords = () => {
@@ -47,6 +49,20 @@ class GameContainer extends Component {
     });
   };
 
+  increaseGuesses = () => {
+    const guesses = this.state.guesses + 1;
+    this.setState({ guesses });
+  };
+
+  handleCardSelect = word => {
+    this.increaseGuesses();
+    if (this.state.guesses == this.state.clue["numberClue"]) {
+      this.setState({ spymasterView: !this.state.spymasterView, guesses: 1 });
+    } else {
+      console.log(`Back to Spymaster's View!`);
+    }
+  };
+
   render() {
     const { words, scores, spymasterView, clue } = this.state;
     return (
@@ -61,7 +77,11 @@ class GameContainer extends Component {
               spymasterView={spymasterView}
               clue={clue}
             />
-            <GameBoard words={words} spymasterView={spymasterView} />
+            <GameBoard
+              words={words}
+              spymasterView={spymasterView}
+              handleCardSelect={word => this.handleCardSelect(word)}
+            />
           </Grid.Column>
           <Grid.Column width={3}>
             <Timer />
