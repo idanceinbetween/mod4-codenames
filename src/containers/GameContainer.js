@@ -78,7 +78,7 @@ class GameContainer extends Component {
   increaseGuesses = () => {
     const guesses = this.state.guesses + 1;
     this.setState({ guesses });
-    if (guesses === parseInt(this.state.clue["numberClue"], 10)) {
+    if (!(guesses < parseInt(this.state.clue["numberClue"], 10))) {
       this.swapTeam();
       this.restoreSpymasterView();
     }
