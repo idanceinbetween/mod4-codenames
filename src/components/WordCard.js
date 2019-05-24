@@ -7,12 +7,6 @@ class WordCard extends Component {
   checkSelect = () => {
     if (!this.props.spymasterView) {
       this.props.handleCardSelect(this.props.word);
-    } else {
-      console.log(
-        `WordCard ${this.props.word.word} of ${
-          this.props.word.color
-        } clicked but nothing should happen because it's gamemasters turn`
-      );
     }
   };
 

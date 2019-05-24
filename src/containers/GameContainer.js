@@ -54,12 +54,27 @@ class GameContainer extends Component {
     this.setState({ guesses });
   };
 
+  restoreSpymasterView = () => {
+    this.getWords();
+    this.setState({
+      spymasterView: !this.state.spymasterView,
+      guesses: 1,
+      clue: { numberClue: null, textClue: null }
+    });
+    console.log(`Spymaster's View Restored!`);
+  };
+
+  checkHit = word => {
+    return console.log(`${word} is being checked on server`);
+  };
+
   handleCardSelect = word => {
     this.increaseGuesses();
     if (this.state.guesses == this.state.clue["numberClue"]) {
-      this.setState({ spymasterView: !this.state.spymasterView, guesses: 1 });
+      this.checkHit(word.word);
+      this.restoreSpymasterView();
     } else {
-      console.log(`Back to Spymaster's View!`);
+      this.checkHit(word.word);
     }
   };
 
