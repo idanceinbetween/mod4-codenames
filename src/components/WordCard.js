@@ -2,10 +2,10 @@ import React, { Component } from "react";
 import { Card } from "semantic-ui-react";
 
 class WordCard extends Component {
-  //   state = { revealed: false };
+  state = { hit: false };
 
   checkSelect = () => {
-    if (!this.props.spymasterView) {
+    if (!this.props.spymasterView && !this.state.hit) {
       this.props.handleCardSelect(this.props.word);
     }
   };
