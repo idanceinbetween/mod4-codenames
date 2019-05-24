@@ -1,43 +1,28 @@
-import React from "react";
-import { Grid } from "semantic-ui-react";
+import React, { Component } from "react";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
-import GameBoard from "../components/GameBoard";
-import Scoreboard from "../components/Scoreboard";
-import Timer from "../components/Timer";
-import Clue from "../components/Clue";
-import WordCard from "../components/WordCard";
+import About from "../components/About";
+import Home from "../components/Home";
+import MainGame from "./MainGame";
 
-const MainCanvas = () => (
-  <Grid columns={4} centered>
-    <Grid.Row verticalAlign="top">
-      <Grid.Column width={3}>
-        <Scoreboard />
-      </Grid.Column>
-      <Grid.Column width={10}>
-        <Clue />
-        <GameBoard />
-      </Grid.Column>
-      <Grid.Column width={3}>
-        <Timer />
-      </Grid.Column>
-    </Grid.Row>
-
-    <Grid.Row centered columns={16}>
-      <Grid.Column width={3}> </Grid.Column>
-      <Grid.Column width={10} align="center">
-        {/* <WordCard /> */}
-      </Grid.Column>
-      <Grid.Column width={3}> </Grid.Column>
-    </Grid.Row>
-
-    <Grid.Row centered columns={16}>
-      <Grid.Column width={3}> </Grid.Column>
-      <Grid.Column width={10} align="center">
-        Placeholder for Spymaster Component
-      </Grid.Column>
-      <Grid.Column width={3}> </Grid.Column>
-    </Grid.Row>
-  </Grid>
-);
+class MainCanvas extends Component {
+  state = {};
+  render() {
+    return (
+      <div>
+        <Switch>
+          <Route exact path="/" render={Home} />
+          <Route exact path="/games/new" render={MainGame} />
+          <Route exact path="/about" render={About} />
+          <Route
+            component={() => (
+              <h1>404 Not Found and this is shown in the main canvas</h1>
+            )}
+          />
+        </Switch>
+      </div>
+    );
+  }
+}
 
 export default MainCanvas;
