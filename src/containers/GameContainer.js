@@ -14,7 +14,8 @@ class GameContainer extends Component {
   state = {
     words: [],
     scores: [{ color: "red", score: 0 }, { color: "blue", score: 0 }],
-    spymasterView: false //as soon as it is false, color key/value pair in each word disappears. Does not come back if switches back on.
+    spymasterView: true, //as soon as it is false, color key/value pair in each word disappears. Does not come back if switches back on.
+    clue: { numberClue: null, textClue: null }
   };
 
   getWords = () => {
@@ -35,6 +36,17 @@ class GameContainer extends Component {
     this.getWords();
   }
 
+  handleClueSubmit = event => {
+    this.setState({
+      clue: {
+        ...this.state.clue,
+        numberClue: event.target["numberClue"].value,
+        textClue: event.target["textClue"].value
+      },
+      spymasterView: false
+    });
+  };
+
   render() {
     const { words, scores } = this.state;
     return (
@@ -44,7 +56,7 @@ class GameContainer extends Component {
             <Scoreboard scores={scores} />
           </Grid.Column>
           <Grid.Column width={10}>
-            <Clue />
+            <Clue handleClueSubmit={this.handleClueSubmit} />
             <GameBoard
               words={this.state.words}
               spymasterView={this.state.spymasterView}
