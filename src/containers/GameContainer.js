@@ -6,7 +6,6 @@ import Scoreboard from "../components/Scoreboard";
 import Timer from "../components/Timer";
 import Clue from "../components/Clue";
 
-// const randomWords = require("random-words");
 // const baseUrl = "localhost:3007";
 // const wordsUrl = baseUrl + "/start";
 
@@ -44,18 +43,26 @@ class GameContainer extends Component {
     scores: { red: 0, blue: 0 },
     spymasterView: true,
     clue: { numberClue: null, textClue: null },
-    guesses: 1,
-    activeTeam: "blue"
+    guesses: 0,
+    activeTeam: null
   };
 
   getWords = () => {
-    // const words = randomWords({ exactly: 25, maxLength: 15 });
     this.setState({ words: DATA });
-    console.log(`get words from server and put in state`);
+  };
+
+  setTeam = () => {
+    const blueWords = DATA.filter(w => w.color === "b");
+    const redWords = DATA.filter(w => w.color === "r");
+    debugger;
+    blueWords.length > redWords.length
+      ? this.setState({ activeTeam: "blue" })
+      : this.setState({ activeTeam: "red" });
   };
 
   componentDidMount() {
     this.getWords();
+    this.setTeam();
   }
 
   handleClueSubmit = event => {
@@ -72,13 +79,17 @@ class GameContainer extends Component {
   increaseGuesses = () => {
     const guesses = this.state.guesses + 1;
     this.setState({ guesses });
+    if (guesses === parseInt(this.state.clue["numberClue"], 10)) {
+      this.swapTeam();
+      this.restoreSpymasterView();
+    }
   };
 
   restoreSpymasterView = () => {
     this.getWords();
     this.setState({
       spymasterView: !this.state.spymasterView,
-      guesses: 1,
+      guesses: 0,
       clue: { numberClue: null, textClue: null }
     });
     console.log(`Spymaster's View Restored!`);
@@ -95,16 +106,16 @@ class GameContainer extends Component {
 
   checkHit = word => {
     const result = this.findWordOnServer(word);
-
     switch (colorCodes[result.color]) {
       case this.state.activeTeam:
         this.addScore();
-        break;
+        return true;
       case "assassin":
-        console.log("you've hit assassin");
-        break;
+        return false;
       default:
+        this.increaseGuesses();
         console.log("wrong guess");
+        return true;
     }
   };
 
@@ -114,14 +125,8 @@ class GameContainer extends Component {
   };
 
   handleCardSelect = word => {
-    this.increaseGuesses();
-    if (this.state.guesses === parseInt(this.state.clue["numberClue"], 10)) {
-      this.checkHit(word);
-      this.swapTeam();
-      this.restoreSpymasterView();
-    } else {
-      this.checkHit(word);
-    }
+    const result = this.checkHit(word);
+    result ? this.increaseGuesses() : console.log("game ends");
   };
 
   render() {
