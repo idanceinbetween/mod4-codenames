@@ -48,7 +48,7 @@ class GameContainer extends Component {
   };
 
   render() {
-    const { words, scores } = this.state;
+    const { words, scores, spymasterView, clue } = this.state;
     return (
       <Grid columns={4} centered>
         <Grid.Row verticalAlign="top">
@@ -56,11 +56,12 @@ class GameContainer extends Component {
             <Scoreboard scores={scores} />
           </Grid.Column>
           <Grid.Column width={10}>
-            <Clue handleClueSubmit={this.handleClueSubmit} />
-            <GameBoard
-              words={this.state.words}
-              spymasterView={this.state.spymasterView}
+            <Clue
+              handleClueSubmit={this.handleClueSubmit}
+              spymasterView={spymasterView}
+              clue={clue}
             />
+            <GameBoard words={words} spymasterView={spymasterView} />
           </Grid.Column>
           <Grid.Column width={3}>
             <Timer />
