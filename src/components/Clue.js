@@ -1,9 +1,8 @@
 import React, { Component, Fragment } from "react";
 import { Button, Form, Segment } from "semantic-ui-react";
-import { format } from "util";
 
 class Clue extends Component {
-  state = {};
+  state = { numberClue: null, textClue: null };
 
   handleChange = (e, { name, value }) => this.setState({ [name]: value });
 

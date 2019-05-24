@@ -11,7 +11,7 @@ class WordCard extends Component {
   };
 
   render() {
-    const { word, handleSelect } = this.props;
+    const { word } = this.props;
     // const { word, color } = this.props.word;
     return (
       <Card className="cnWord" onClick={this.checkSelect}>

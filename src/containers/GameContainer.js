@@ -5,11 +5,11 @@ import GameBoard from "../components/GameBoard";
 import Scoreboard from "../components/Scoreboard";
 import Timer from "../components/Timer";
 import Clue from "../components/Clue";
-import { mixedTypeAnnotation } from "@babel/types";
+// import { mixedTypeAnnotation } from "@babel/types";
 
 // const randomWords = require("random-words");
-const baseUrl = "localhost:3007";
-const wordsUrl = baseUrl + "/start";
+// const baseUrl = "localhost:3007";
+// const wordsUrl = baseUrl + "/start";
 
 class GameContainer extends Component {
   state = {
@@ -17,20 +17,20 @@ class GameContainer extends Component {
     scores: [{ color: "red", score: 0 }, { color: "blue", score: 0 }],
     spymasterView: true, //as soon as it is false, color key/value pair in each word disappears. Does not come back if switches back on.
     clue: { numberClue: null, textClue: null },
-    guesses: 1
+    guesses: 1,
+    activeTeam: null
   };
 
   getWords = () => {
     // const words = randomWords({ exactly: 25, maxLength: 15 });
     const words = [
-      { word: "phoenix", color: "r" },
-      { word: "ocean", color: "b" },
-      { word: "washington", color: "a" },
-      { word: "wallet", color: "y" },
-      { word: "slug", color: "b" }
+      { id: 1, word: "phoenix", color: "r" },
+      { id: 2, word: "ocean", color: "b" },
+      { id: 3, word: "washington", color: "a" },
+      { id: 4, word: "wallet", color: "y" },
+      { id: 5, word: "slug", color: "b" }
     ];
     this.setState({ words });
-    //fetch from 'wordsUrl'
     console.log(`get words from server and put in state`);
   };
 
@@ -64,13 +64,16 @@ class GameContainer extends Component {
     console.log(`Spymaster's View Restored!`);
   };
 
+  addScore = () => {};
+
   checkHit = word => {
     return console.log(`${word} is being checked on server`);
+    //if correct, this.addScore
   };
 
   handleCardSelect = word => {
     this.increaseGuesses();
-    if (this.state.guesses == this.state.clue["numberClue"]) {
+    if (this.state.guesses === parseInt(this.state.clue["numberClue"], 10)) {
       this.checkHit(word.word);
       this.restoreSpymasterView();
     } else {

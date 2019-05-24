@@ -7,7 +7,11 @@ const mapWordsWithColors = props => {
   return (
     <Card.Group itemsPerRow={5}>
       {props.words.map(word => (
-        <WordCard word={word} spymasterView={props.spymasterView} />
+        <WordCard
+          key={word.id}
+          word={word}
+          spymasterView={props.spymasterView}
+        />
       ))}
     </Card.Group>
   );
@@ -23,6 +27,7 @@ const mapWordsNoColors = props => {
     <Card.Group itemsPerRow={5}>
       {newArray.map(word => (
         <WordCard
+          key={word.id}
           word={word}
           spymasterView={props.spymasterView}
           handleCardSelect={word => props.handleCardSelect(word)}
