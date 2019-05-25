@@ -1,11 +1,12 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import { Card } from "semantic-ui-react";
 
 class WordCard extends Component {
   state = { hit: false };
 
   checkSelect = () => {
-    if (!this.props.spymasterView && !this.state.hit) {
+    if (!this.props.spymasterView) {
+      this.setState({ hit: true });
       this.props.handleCardSelect(this.props.word);
     }
   };
@@ -14,9 +15,17 @@ class WordCard extends Component {
     const { word } = this.props;
     // const { word, color } = this.props.word;
     return (
-      <Card className="cnWord" onClick={this.checkSelect}>
-        <Card.Header>{word.word}</Card.Header>
-      </Card>
+      <Fragment>
+        {!this.state.hit ? (
+          <Card className="cnWord" onClick={this.checkSelect}>
+            <Card.Header>{word.word}</Card.Header>
+          </Card>
+        ) : (
+          <Card className="cnWord">
+            <Card.Header>{""}</Card.Header>
+          </Card>
+        )}
+      </Fragment>
     );
   }
 }
