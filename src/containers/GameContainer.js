@@ -6,31 +6,32 @@ import Scoreboard from "../components/Scoreboard";
 import Timer from "../components/Timer";
 import Clue from "../components/Clue";
 
-// const baseUrl = "localhost:3007";
-// const wordsUrl = baseUrl + "/start";
+const baseUrl = "http://localhost:3007";
+const startUrl = baseUrl + "/start";
+const gamesUrl = baseUrl + "/games";
 
-const DATA = [
-  { id: 1, word: "phoenix", color: "r" },
-  { id: 2, word: "ocean", color: "b" },
-  { id: 3, word: "washington", color: "a" },
-  { id: 4, word: "wallet", color: "y" },
-  { id: 5, word: "slug", color: "b" }
-];
+// const DATA = [
+//   { id: 1, word: "phoenix", color: "r" },
+//   { id: 2, word: "ocean", color: "b" },
+//   { id: 3, word: "washington", color: "a" },
+//   { id: 4, word: "wallet", color: "y" },
+//   { id: 5, word: "slug", color: "b" }
+// ];
 
-const SERVERDATA = [
-  { id: 1, word: "phoenix", color: "r" },
-  { id: 2, word: "ocean", color: "b" },
-  { id: 3, word: "washington", color: "a" },
-  { id: 4, word: "wallet", color: "y" },
-  { id: 5, word: "slug", color: "b" }
-];
+// const SERVERDATA = [
+//   { id: 1, word: "phoenix", color: "r" },
+//   { id: 2, word: "ocean", color: "b" },
+//   { id: 3, word: "washington", color: "a" },
+//   { id: 4, word: "wallet", color: "y" },
+//   { id: 5, word: "slug", color: "b" }
+// ];
 
-const colorCodes = {
-  b: "blue",
-  r: "red",
-  y: "yellow",
-  a: "assassin"
-};
+// const colorCodes = {
+//   b: "blue",
+//   r: "red",
+//   y: "yellow",
+//   a: "assassin"
+// };
 
 const swapTeam = {
   blue: "red",
@@ -44,25 +45,41 @@ class GameContainer extends Component {
     spymasterView: true,
     clue: { numberClue: null, textClue: null },
     guesses: 0,
-    activeTeam: null
-  };
-
-  getWords = () => {
-    this.setState({ words: DATA });
-  };
-
-  setTeam = () => {
-    const blueWords = DATA.filter(w => w.color === "b");
-    const redWords = DATA.filter(w => w.color === "r");
-    blueWords.length > redWords.length
-      ? this.setState({ activeTeam: "blue" })
-      : this.setState({ activeTeam: "red" });
+    activeTeam: null,
+    gameId: null
   };
 
   componentDidMount() {
-    this.getWords();
-    this.setTeam();
+    this.startGame().then(data => {
+      this.setInitialState(data);
+    });
   }
+
+  startGame = () => fetch(startUrl).then(resp => resp.json());
+
+  setInitialState = data => {
+    const blueWords = data.tiles.filter(w => w.color === "blue");
+    const redWords = data.tiles.filter(w => w.color === "red");
+    blueWords.length > redWords.length
+      ? this.setState({
+          activeTeam: "blue",
+          words: data.tiles,
+          gameId: data.id
+        })
+      : this.setState({
+          activeTeam: "red",
+          words: data.tiles,
+          gameId: data.id
+        });
+  };
+
+  // setTeam = () => {
+  //   const blueWords = this.state.words.filter(w => w.color === "blue");
+  //   const redWords = this.state.words.filter(w => w.color === "red");
+  //   blueWords.length > redWords.length
+  //     ? this.setState({ activeTeam: "blue" })
+  //     : this.setState({ activeTeam: "red" });
+  // };
 
   handleClueSubmit = event => {
     this.setState({
@@ -84,13 +101,18 @@ class GameContainer extends Component {
     }
   };
 
+  getGame = () =>
+    fetch(gamesUrl + `/${this.state.gameId}`).then(resp => resp.json());
+
   restoreSpymasterView = () => {
-    this.getWords();
-    this.setState({
-      spymasterView: !this.state.spymasterView,
-      guesses: 0,
-      clue: { numberClue: null, textClue: null }
-    });
+    this.getGame().then(data =>
+      this.setState({
+        words: data.tiles,
+        spymasterView: !this.state.spymasterView,
+        guesses: 0,
+        clue: { numberClue: null, textClue: null }
+      })
+    );
     console.log(`Spymaster's View Restored!`);
   };
 
@@ -101,22 +123,49 @@ class GameContainer extends Component {
     });
   };
 
-  findWordOnServer = word => SERVERDATA.find(w => w.id === word.id);
-
-  checkHit = word => {
-    const result = this.findWordOnServer(word);
-    switch (colorCodes[result.color]) {
-      case this.state.activeTeam:
-        this.addScore();
-        return true;
-      case "assassin":
-        return false;
-      default:
-        this.increaseGuesses();
-        console.log("wrong guess");
-        return true;
-    }
+  findWordOnServer = word => {
+    debugger;
+    return this.getGame()
+      .then(data => data.tiles.find(w => w.word === word.word))
+      .then(foundWord => {
+        switch (foundWord.color) {
+          case this.state.activeTeam:
+            this.addScore();
+            return true;
+          case "assassin":
+            return false;
+          default:
+            this.increaseGuesses();
+            console.log("wrong guess");
+            return true;
+        }
+      });
   };
+  // .catch(err => {
+  //   if (err.text) {
+  //     err.text().then(errorMessage => {
+  //       this.props.dispatch(displayTheError(errorMessage));
+  //     });
+  //   } else {
+  //     this.props.dispatch(displayTheError("There was an error.")); // Hardcoded error here
+  //   }
+  // });
+
+  // checkHit = word => {
+  //   // const result = this.findWordOnServer(word);
+  //   debugger;
+  //   switch (word.color) {
+  //     case this.state.activeTeam:
+  //       this.addScore();
+  //       return true;
+  //     case "assassin":
+  //       return false;
+  //     default:
+  //       this.increaseGuesses();
+  //       console.log("wrong guess");
+  //       return true;
+  //   }
+  // };
 
   swapTeam = () => {
     const team = this.state.activeTeam;
@@ -124,7 +173,7 @@ class GameContainer extends Component {
   };
 
   handleCardSelect = word => {
-    const result = this.checkHit(word);
+    const result = this.findWordOnServer(word);
     result ? this.increaseGuesses() : console.log("game ends");
   };
 
