@@ -131,7 +131,7 @@ class GameContainer extends Component {
   }
 
   handleBomb = () => {
-    // alert("Time's up! Next view.");
+    // console.log("Time's up! Next view.")
     this.swapTeam()
     if (this.state.spymasterView) {
       //spymaster's turn but didn't give clue, swap team and keep spymasterview
