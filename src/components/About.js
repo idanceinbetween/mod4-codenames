@@ -1,7 +1,8 @@
-import React from "react";
+import React from 'react'
+import AbsoluteWrapper from '../components/AbsoluteWrapper'
 
 const About = () => {
-  return <div>This is the About Page</div>;
-};
+  return <AbsoluteWrapper>This is the About Page</AbsoluteWrapper>
+}
 
-export default About;
+export default About
