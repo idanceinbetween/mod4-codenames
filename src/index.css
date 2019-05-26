@@ -1,20 +1,28 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
 
 #game-board {
   display: grid;
   grid-template-columns: 2fr 2fr 2fr 2fr 2fr;
+}
+
+.position-absolute {
+  position: absolute !important;
+}
+
+.w-100 {
+  width: 100% !important;
 }
 
 .word-box {
@@ -37,7 +45,7 @@ code {
 }
 
 .cards.ui .card {
-  background-image: url("pix/manonPeteSmall.jpg");
+  background-image: url('pix/manonPeteSmall.jpg');
   background-size: 100%;
   height: 10vh;
 }
@@ -59,18 +67,18 @@ code {
 
 .card,
 .blue {
-  background-image: url("pix/guyAzam.jpg");
+  background-image: url('pix/guyAzam.jpg');
   background-size: 100%;
 }
 
 .card,
 .white {
-  background-image: url("pix/jxMoses.jpg");
+  background-image: url('pix/jxMoses.jpg');
   background-size: 100%;
 }
 
 .card,
 .black {
-  background-image: url("pix/peteAssassin.jpg");
+  background-image: url('pix/peteAssassin.jpg');
   background-size: 100%;
 }
