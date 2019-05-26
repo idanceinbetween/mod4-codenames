@@ -10,7 +10,8 @@ class StartPlay extends Component {
   }
 
   goToStart = () => {
-    console.log('start game')
+    alert('Need to write transition and action')
+    console.log(`State has the first username: ${this.state.name}`)
   }
 
   render() {
