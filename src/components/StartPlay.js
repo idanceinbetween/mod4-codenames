@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import { Input, Button, Transition } from 'semantic-ui-react'
+import { Link } from 'react-router-dom'
+
 class StartPlay extends Component {
   state = {
     name: ''
@@ -23,7 +25,9 @@ class StartPlay extends Component {
           placeholder='Enter your name to start'
         />
         <br />
-        <Button onClick={this.goToStart}>Submit</Button>
+        <Link to='/games'>
+          <Button>Submit</Button>
+        </Link>
       </div>
     )
   }
