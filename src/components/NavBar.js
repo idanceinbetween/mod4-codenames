@@ -12,17 +12,8 @@ const NavBar = () => (
   <div>
     {/* <Menu items={items} /> */}
     <Menu>
-      <Link to='/' exact>
-        Home
-      </Link>
-      |
-      <Link to='/games' exact>
-        Games
-      </Link>
-      |
-      <Link to='/about' exact>
-        About
-      </Link>
+      <Link to='/'>Home</Link>|<Link to='/games'>Games</Link>|
+      <Link to='/about'>About</Link>
     </Menu>
   </div>
 )

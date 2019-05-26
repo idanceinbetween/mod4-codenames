@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react'
 import { Button, Form, Segment } from 'semantic-ui-react'
 
 class Clue extends Component {
-  state = { numberClue: null, textClue: null }
+  state = { numberClue: '', textClue: '' }
 
   handleChange = (e, { name, value }) => this.setState({ [name]: value })
 

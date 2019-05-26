@@ -43,9 +43,9 @@ class GameContainer extends Component {
     words: [],
     scores: { red: 0, blue: 0 },
     spymasterView: true,
-    clue: { numberClue: null, textClue: null },
+    clue: { numberClue: '', textClue: '' },
     guesses: 0,
-    activeTeam: null,
+    activeTeam: '',
     timer: 5
   }
 
