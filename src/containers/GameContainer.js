@@ -47,7 +47,7 @@ class GameContainer extends Component {
     guesses: 0,
     activeTeam: '',
     timer: 5,
-    runTimer: false
+    runTimer: true
   }
 
   getWords = () => {
