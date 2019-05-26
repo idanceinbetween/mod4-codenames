@@ -2,7 +2,8 @@ import React, { Component } from 'react'
 
 class Timer extends Component {
   state = {
-    timer: this.props.timer
+    timer: this.props.timer,
+    runTimer: this.props.runTimer
   }
 
   timer = () => {
@@ -14,12 +15,26 @@ class Timer extends Component {
       clearInterval(this.intervalId)
       this.props.bomb()
       this.setState({ timer: this.props.timer })
-      this.intervalId = setInterval(this.timer, 1000)
+      if (this.props.runTimer) {
+        this.intervalId = setInterval(this.timer, 1000)
+      }
     }
   }
 
   componentDidMount() {
-    this.intervalId = setInterval(this.timer, 1000)
+    if (this.props.runTimer) {
+      this.intervalId = setInterval(this.timer, 1000)
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.runTimer !== this.props.runTimer && this.props.runTimer) {
+      //when timer was stopped and main app asks to activate timer
+      this.intervalId = setInterval(this.timer, 1000)
+    } else if (this.props.runTimer === false) {
+      //when main app asks to pause timer
+      clearInterval(this.intervalId)
+    }
   }
 
   componentWillUnmount() {

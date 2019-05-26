@@ -46,7 +46,8 @@ class GameContainer extends Component {
     clue: { numberClue: '', textClue: '' },
     guesses: 0,
     activeTeam: '',
-    timer: 5
+    timer: 5,
+    runTimer: false
   }
 
   getWords = () => {
@@ -131,7 +132,7 @@ class GameContainer extends Component {
   }
 
   handleBomb = () => {
-    // console.log("Time's up! Next view.")
+    console.log("Time's up! Next view.")
     this.swapTeam()
     if (this.state.spymasterView) {
       //spymaster's turn but didn't give clue, swap team and keep spymasterview
@@ -165,6 +166,7 @@ class GameContainer extends Component {
           <Grid.Column width={3}>
             <Timer
               timer={timer}
+              runTimer={this.state.runTimer}
               bomb={this.handleBomb}
               activeTeam={activeTeam}
             />
