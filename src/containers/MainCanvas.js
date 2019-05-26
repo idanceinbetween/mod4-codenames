@@ -1,4 +1,4 @@
-import React, { Component, useContext } from 'react'
+import React, { useContext } from 'react'
 import { Route, Switch, __RouterContext } from 'react-router-dom'
 import { useTransition, animated } from 'react-spring'
 
@@ -17,16 +17,22 @@ const MainCanvas = () => {
 
   return (
     <div>
-      <Switch>
-        <Route exact path='/' component={HomeContainer} />
-        <Route exact path='/games' component={GameContainer} />
-        <Route exact path='/about' render={About} />
-        <Route
-          component={() => (
-            <h1>404 Not Found and this is shown in the main canvas</h1>
-          )}
-        />
-      </Switch>
+      {transitions.map(({ item, props, key }) => (
+        <animated.div key={key} style={props}>
+          <Switch location={item}>
+            <Route exact path='/' component={HomeContainer} />
+            <Route exact path='/games' component={GameContainer} />
+            <Route exact path='/about' render={About} />
+            <Route
+              component={() => (
+                <h1>
+                  404 Not Found and this is shown in the (APP's second half)
+                </h1>
+              )}
+            />
+          </Switch>
+        </animated.div>
+      ))}
     </div>
   )
 }
