@@ -1,6 +1,6 @@
-import React from "react";
-import { Menu } from "semantic-ui-react";
-import { Link } from "react-router-dom";
+import React from 'react'
+import { Menu } from 'semantic-ui-react'
+import { Link } from 'react-router-dom'
 
 // const items = [
 //   { key: "home", active: true, name: "Home" },
@@ -12,19 +12,19 @@ const NavBar = () => (
   <div>
     {/* <Menu items={items} /> */}
     <Menu>
-      <Link to="/" exact>
+      <Link to='/' exact>
         Home
       </Link>
       |
-      <Link to="/games" exact>
+      <Link to='/games' exact>
         Games
       </Link>
       |
-      <Link to="/about" exact>
+      <Link to='/about' exact>
         About
       </Link>
     </Menu>
   </div>
-);
+)
 
-export default NavBar;
+export default NavBar

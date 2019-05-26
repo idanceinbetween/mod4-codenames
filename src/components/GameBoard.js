@@ -1,7 +1,7 @@
 // import React, { Component } from "react";
-import React from "react";
-import { Card } from "semantic-ui-react";
-import WordCard from "./WordCard";
+import React from 'react'
+import { Card } from 'semantic-ui-react'
+import WordCard from './WordCard'
 
 const mapWordsWithColors = props => {
   return (
@@ -14,14 +14,14 @@ const mapWordsWithColors = props => {
         />
       ))}
     </Card.Group>
-  );
-};
+  )
+}
 
 const mapWordsNoColors = props => {
   const newArray = props.words.map(word => {
-    delete word.color;
-    return word;
-  });
+    delete word.color
+    return word
+  })
 
   return (
     <Card.Group itemsPerRow={5}>
@@ -34,18 +34,18 @@ const mapWordsNoColors = props => {
         />
       ))}
     </Card.Group>
-  );
-};
+  )
+}
 
 const GameBoard = props => {
   if (props.spymasterView) {
-    return mapWordsWithColors(props);
+    return mapWordsWithColors(props)
   } else {
-    return mapWordsNoColors(props);
+    return mapWordsNoColors(props)
   }
-};
+}
 
-export default GameBoard;
+export default GameBoard
 
 // class GameBoard extends Component {
 //   renderWordCards = () =>

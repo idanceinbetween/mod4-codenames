@@ -1,8 +1,8 @@
-import React from "react";
-import { Header, Image, Table } from "semantic-ui-react";
+import React from 'react'
+import { Header, Image, Table } from 'semantic-ui-react'
 
 const Scoreboard = props => (
-  <Table basic="very" celled collapsing>
+  <Table basic='very' celled collapsing>
     <Table.Header>
       <Table.Row>
         <Table.HeaderCell>Team</Table.HeaderCell>
@@ -12,11 +12,11 @@ const Scoreboard = props => (
     <Table.Body>
       <Table.Row>
         <Table.Cell>
-          <Header as="h4" image>
+          <Header as='h4' image>
             <Image
-              src="https://react.semantic-ui.com/images/avatar/small/lena.png"
+              src='https://react.semantic-ui.com/images/avatar/small/lena.png'
               rounded
-              size="mini"
+              size='mini'
             />
             <Header.Content>Red</Header.Content>
           </Header>
@@ -25,11 +25,11 @@ const Scoreboard = props => (
       </Table.Row>
       <Table.Row>
         <Table.Cell>
-          <Header as="h4" image>
+          <Header as='h4' image>
             <Image
-              src="https://react.semantic-ui.com/images/avatar/small/matthew.png"
+              src='https://react.semantic-ui.com/images/avatar/small/matthew.png'
               rounded
-              size="mini"
+              size='mini'
             />
             <Header.Content>Blue</Header.Content>
           </Header>
@@ -38,6 +38,6 @@ const Scoreboard = props => (
       </Table.Row>
     </Table.Body>
   </Table>
-);
+)
 
-export default Scoreboard;
+export default Scoreboard
