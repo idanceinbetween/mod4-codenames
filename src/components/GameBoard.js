@@ -49,7 +49,7 @@ const mapTilesNoColors = props => {
           color='wcn'
           tile={tile}
           spymasterView={props.spymasterView}
-          handleCardSelect={tile => props.handleCardSelect(tile)}
+          handleTileSelect={tile => props.handleTileSelect(tile)}
         />
       ))}
     </Card.Group>
@@ -67,50 +67,3 @@ const GameBoard = props => {
 }
 
 export default GameBoard
-
-// class GameBoard extends Component {
-//   renderTiles = () =>
-//     this.props.words.map(word => {
-//       return <Tile word={word} />;
-//     });
-
-//   render() {
-//     return <Card.Group itemsPerRow={5}>{this.renderTiles()}</Card.Group>;
-//   }
-// }
-
-// export default GameBoard;
-
-// {this.colors.map(color => (
-//   <Grid.Column color={color} key={color}>
-//     {_.capitalize(color)}
-//   </Grid.Column>
-// ))}
-
-// colors = [
-//   "red",
-//   "orange",
-//   "yellow",
-//   "olive",
-//   "green",
-//   "teal",
-//   "blue",
-//   "violet",
-//   "purple",
-//   "pink",
-//   "brown",
-//   "grey",
-//   "black",
-//   "red",
-//   "orange",
-//   "yellow",
-//   "olive",
-//   "green",
-//   "teal",
-//   "blue",
-//   "violet",
-//   "purple",
-//   "pink",
-//   "brown",
-//   "grey"
-// ];

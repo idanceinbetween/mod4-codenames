@@ -7,7 +7,7 @@ class Tile extends Component {
   checkSelect = () => {
     if (!this.props.spymasterView) {
       this.setState({ hit: true })
-      this.props.handleCardSelect(this.props.tile)
+      this.props.handleTileSelect(this.props.tile)
     }
   }
 

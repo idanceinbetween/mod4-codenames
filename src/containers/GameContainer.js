@@ -3,7 +3,6 @@ import { Grid } from 'semantic-ui-react'
 
 import GameBoard from '../components/GameBoard'
 import Scoreboard from '../components/Scoreboard'
-import Timer from '../components/Timer'
 import Clue from '../components/Clue'
 
 const baseUrl = 'http://localhost:3007'
@@ -62,14 +61,60 @@ class GameContainer extends Component {
     })
   }
 
+  handleTileSelect = tile => {
+    return this.getGame()
+      .then(() => this.findTileOnServer(tile))
+      .then(selectedTile => this.checkTileStatus(selectedTile))
+      .then(result =>
+        result ? this.increaseGuesses() : console.log('game ends')
+      )
+  }
+
+  getGame = () =>
+    fetch(gamesUrl + `/${this.state.gameId}`).then(resp => resp.json())
+
+  findTileOnServer = tile => {
+    return this.getGame().then(data => data.tiles.find(t => t.id === tile.id))
+  }
+
+  checkTileStatus = selectedTile => {
+    switch (selectedTile.color) {
+      case this.state.activeTeam:
+        this.addScore(this.state.activeTeam)
+        return true // pass back to handleTileSelect to increaseGuesses etc
+      case swapTeam[this.state.activeTeam]:
+        console.log("Other team's tile!")
+        this.addScore(this.swapTeam[this.state.activeTeam])
+        return true
+      case 'assassin':
+        console.log('You picked the assassin.')
+        return false
+      default:
+        //yellow tile
+        console.log('Wrong guess, move on')
+        return true
+    }
+  }
+
+  addScore = team => {
+    const score = this.state.scores[team] + 1
+    this.setState({
+      scores: { ...this.state.scores, [team]: score }
+    })
+  }
+
   increaseGuesses = () => {
     const guesses = this.state.guesses + 1
-    debugger
     this.setState({ guesses })
     if (!(guesses < parseInt(this.state.clue['numberClue'], 10))) {
       this.swapTeam()
       this.getGame().then(data => this.restoreSpymasterView(data))
     }
+  }
+
+  swapTeam = () => {
+    const team = this.state.activeTeam
+    this.setState({ activeTeam: swapTeam[team] })
   }
 
   restoreSpymasterView = data => {
@@ -82,39 +127,6 @@ class GameContainer extends Component {
     console.log(`Spymaster's View Restored!`)
   }
 
-  addScore = team => {
-    const score = this.state.scores[team] + 1
-    this.setState({
-      scores: { ...this.state.scores, [team]: score }
-    })
-  }
-
-  getGame = () =>
-    fetch(gamesUrl + `/${this.state.gameId}`).then(resp => resp.json())
-
-  findTileOnServer = tile => {
-    return this.getGame()
-      .then(data => data.tiles.find(t => t.id === tile.id))
-      .then(foundTile => {
-        switch (foundTile.color) {
-          case this.state.activeTeam:
-            this.addScore(this.state.activeTeam)
-            return true // pass back to handleCardSelect to increaseGuesses etc
-          case swapTeam[this.state.activeTeam]:
-            console.log("Other team's tile!")
-            this.addScore(this.swapTeam[this.state.activeTeam])
-            return true
-          case 'assassin':
-            console.log('You picked the assassin.')
-            return false
-          default:
-            //yellow tile
-            console.log('wrong guess')
-
-            return true
-        }
-      })
-  }
   // .catch(err => {
   //   if (err.text) {
   //     err.text().then(errorMessage => {
@@ -124,33 +136,6 @@ class GameContainer extends Component {
   //     this.props.dispatch(displayTheError("There was an error.")); // Hardcoded error here
   //   }
   // });
-
-  // checkHit = word => {
-  //   // const result = this.findWordOnServer(word);
-  //   debugger;
-  //   switch (word.color) {
-  //     case this.state.activeTeam:
-  //       this.addScore();
-  //       return true;
-  //     case "assassin":
-  //       return false;
-  //     default:
-  //       this.increaseGuesses();
-  //       console.log("wrong guess");
-  //       return true;
-  //   }
-  // };
-
-  swapTeam = () => {
-    const team = this.state.activeTeam
-    this.setState({ activeTeam: swapTeam[team] })
-  }
-
-  handleCardSelect = tile => {
-    this.findTileOnServer(tile).then(result => {
-      result ? this.increaseGuesses() : console.log('game ends')
-    })
-  }
 
   render() {
     const { tiles, scores, spymasterView, clue } = this.state
@@ -165,6 +150,7 @@ class GameContainer extends Component {
               {this.state.spymasterView ? 'Spymaster View' : 'Players View'}
             </h1>
             <h2>Game ID: {this.state.gameId}</h2>
+            <h2>{this.state.activeTeam}</h2>
             <Clue
               handleClueSubmit={this.handleClueSubmit}
               spymasterView={spymasterView}
@@ -174,7 +160,7 @@ class GameContainer extends Component {
               tiles={tiles}
               selectedTile={this.state.selectedTile}
               spymasterView={spymasterView}
-              handleCardSelect={tile => this.handleCardSelect(tile)}
+              handleTileSelect={tile => this.handleTileSelect(tile)}
             />
           </Grid.Column>
           <Grid.Column width={3}>{/* <Timer /> */}</Grid.Column>
