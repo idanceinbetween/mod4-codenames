@@ -6,31 +6,9 @@ import Scoreboard from "../components/Scoreboard";
 import Timer from "../components/Timer";
 import Clue from "../components/Clue";
 
-// const baseUrl = "localhost:3007";
-// const wordsUrl = baseUrl + "/start";
-
-const DATA = [
-  { id: 1, word: "phoenix", color: "r" },
-  { id: 2, word: "ocean", color: "b" },
-  { id: 3, word: "washington", color: "a" },
-  { id: 4, word: "wallet", color: "y" },
-  { id: 5, word: "slug", color: "b" }
-];
-
-const SERVERDATA = [
-  { id: 1, word: "phoenix", color: "r" },
-  { id: 2, word: "ocean", color: "b" },
-  { id: 3, word: "washington", color: "a" },
-  { id: 4, word: "wallet", color: "y" },
-  { id: 5, word: "slug", color: "b" }
-];
-
-const colorCodes = {
-  b: "blue",
-  r: "red",
-  y: "yellow",
-  a: "assassin"
-};
+const baseUrl = "http://localhost:3007";
+const wordsUrl = baseUrl + "/start";
+const gamesUrl = baseUrl + "/games";
 
 const swapTeam = {
   blue: "red",
@@ -39,6 +17,7 @@ const swapTeam = {
 
 class GameContainer extends Component {
   state = {
+    gameId: null,
     words: [],
     scores: { red: 0, blue: 0 },
     spymasterView: true,
@@ -48,20 +27,25 @@ class GameContainer extends Component {
   };
 
   getWords = () => {
-    this.setState({ words: DATA });
+    // this.setState({ words: DATA });
+    return fetch(wordsUrl)
+      .then(resp => resp.json())
+      .then(game => this.setState({
+        gameId: game.id,
+        words: game.tiles
+      }))
   };
 
   setTeam = () => {
-    const blueWords = DATA.filter(w => w.color === "b");
-    const redWords = DATA.filter(w => w.color === "r");
+    const blueWords = this.state.words.filter(w => w.color === "blue");
+    const redWords = this.state.words.filter(w => w.color === "red");
     blueWords.length > redWords.length
       ? this.setState({ activeTeam: "blue" })
-      : this.setState({ activeTeam: "red" });
+      : this.setState({ activeTeam: "red" })
   };
 
   componentDidMount() {
-    this.getWords();
-    this.setTeam();
+    this.getWords().then(() => this.setTeam())
   }
 
   handleClueSubmit = event => {
@@ -85,7 +69,6 @@ class GameContainer extends Component {
   };
 
   restoreSpymasterView = () => {
-    this.getWords();
     this.setState({
       spymasterView: !this.state.spymasterView,
       guesses: 0,
@@ -101,21 +84,40 @@ class GameContainer extends Component {
     });
   };
 
-  findWordOnServer = word => SERVERDATA.find(w => w.id === word.id);
+  findWordOnServer = word => {
+    return fetch(gamesUrl + `/${this.state.gameId}`)
+            .then(resp => resp.json())
+            .then(game => 
+              game.tiles.find(tile => tile.word === word.word)
+            )
+  }
 
   checkHit = word => {
-    const result = this.findWordOnServer(word);
-    switch (colorCodes[result.color]) {
-      case this.state.activeTeam:
-        this.addScore();
-        return true;
-      case "assassin":
-        return false;
-      default:
-        this.increaseGuesses();
-        console.log("wrong guess");
-        return true;
-    }
+    return this.findWordOnServer(word)
+      .then(tile => {
+        switch (tile.color) {
+          case this.state.activeTeam:
+            console.log("correct")
+            this.addScore();
+            return true;
+          case swapTeam[this.state.activeTeam]:
+            console.log("other team's word!");
+            this.swapTeam();
+            this.restoreSpymasterView();
+            return true
+          case "assassin":
+            console.log("the assassin appears.")
+            return false;
+          case "yellow":
+            console.log("neutral tile");
+            this.swapTeam();
+            this.restoreSpymasterView();
+            return true
+          default:
+            console.log("wrong guess");
+            return true;
+        }
+      })
   };
 
   swapTeam = () => {
@@ -124,8 +126,9 @@ class GameContainer extends Component {
   };
 
   handleCardSelect = word => {
-    const result = this.checkHit(word);
-    result ? this.increaseGuesses() : console.log("game ends");
+    this.checkHit(word).then(hit => {
+      hit ? this.increaseGuesses() : console.log(`game over for ${this.state.activeTeam} team!`)
+    })
   };
 
   render() {
