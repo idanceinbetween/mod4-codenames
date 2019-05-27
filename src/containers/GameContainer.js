@@ -1,19 +1,21 @@
-import React, { Component } from "react";
-import { Grid } from "semantic-ui-react";
+import React, { Component } from 'react'
+import { Grid } from 'semantic-ui-react'
 
-import GameBoard from "../components/GameBoard";
-import Scoreboard from "../components/Scoreboard";
-import Timer from "../components/Timer";
-import Clue from "../components/Clue";
+import AbsoluteWrapper from '../components/AbsoluteWrapper'
+
+import GameBoard from '../components/GameBoard'
+import Scoreboard from '../components/Scoreboard'
+import Timer from '../components/Timer'
+import Clue from '../components/Clue'
 
 const baseUrl = "http://localhost:3007";
 const wordsUrl = baseUrl + "/start";
 const gamesUrl = baseUrl + "/games";
 
 const swapTeam = {
-  blue: "red",
-  red: "blue"
-};
+  blue: 'red',
+  red: 'blue'
+}
 
 class GameContainer extends Component {
   state = {
@@ -24,17 +26,15 @@ class GameContainer extends Component {
     clue: { numberClue: null, textClue: null },
     guesses: 0,
     activeTeam: null
-  };
+  }
 
-  getWords = () => {
-    // this.setState({ words: DATA });
-    return fetch(wordsUrl)
+  getWords = () =>
+    fetch(wordsUrl)
       .then(resp => resp.json())
       .then(game => this.setState({
         gameId: game.id,
         words: game.tiles
       }))
-  };
 
   setTeam = () => {
     const blueWords = this.state.words.filter(w => w.color === "blue");
@@ -46,43 +46,42 @@ class GameContainer extends Component {
 
   componentDidMount() {
     this.getWords().then(() => this.setTeam())
-  }
 
   handleClueSubmit = event => {
     this.setState({
       clue: {
         ...this.state.clue,
-        numberClue: event.target["numberClue"].value,
-        textClue: event.target["textClue"].value
+        numberClue: event.target['numberClue'].value,
+        textClue: event.target['textClue'].value
       },
       spymasterView: false
-    });
-  };
+    })
+  }
 
   increaseGuesses = () => {
-    const guesses = this.state.guesses + 1;
-    this.setState({ guesses });
-    if (!(guesses < parseInt(this.state.clue["numberClue"], 10))) {
-      this.swapTeam();
-      this.restoreSpymasterView();
+    const guesses = this.state.guesses + 1
+    this.setState({ guesses })
+    if (!(guesses < parseInt(this.state.clue['numberClue'], 10))) {
+      this.swapTeam()
+      this.restoreSpymasterView()
     }
-  };
+  }
 
   restoreSpymasterView = () => {
     this.setState({
       spymasterView: !this.state.spymasterView,
       guesses: 0,
       clue: { numberClue: null, textClue: null }
-    });
-    console.log(`Spymaster's View Restored!`);
-  };
+    })
+    console.log(`Spymaster's View Restored!`)
+  }
 
   addScore = () => {
-    const score = this.state.scores[this.state.activeTeam] + 1;
+    const score = this.state.scores[this.state.activeTeam] + 1
     this.setState({
       scores: { ...this.state.scores, [this.state.activeTeam]: score }
-    });
-  };
+    })
+  }
 
   findWordOnServer = word => {
     return fetch(gamesUrl + `/${this.state.gameId}`)
@@ -120,10 +119,11 @@ class GameContainer extends Component {
       })
   };
 
+
   swapTeam = () => {
-    const team = this.state.activeTeam;
-    this.setState({ activeTeam: swapTeam[team] });
-  };
+    const team = this.state.activeTeam
+    this.setState({ activeTeam: swapTeam[team] })
+  }
 
   handleCardSelect = word => {
     this.checkHit(word).then(hit => {
@@ -131,41 +131,44 @@ class GameContainer extends Component {
     })
   };
 
-  render() {
-    const { words, scores, spymasterView, clue } = this.state;
-    return (
-      <Grid columns={4} centered>
-        <Grid.Row verticalAlign="top">
-          <Grid.Column width={3}>
-            <Scoreboard scores={scores} />
-          </Grid.Column>
-          <Grid.Column width={10}>
-            <Clue
-              handleClueSubmit={this.handleClueSubmit}
-              spymasterView={spymasterView}
-              clue={clue}
-            />
-            <GameBoard
-              words={words}
-              spymasterView={spymasterView}
-              handleCardSelect={word => this.handleCardSelect(word)}
-            />
-          </Grid.Column>
-          <Grid.Column width={3}>
-            <Timer />
-          </Grid.Column>
-        </Grid.Row>
 
-        <Grid.Row centered columns={16}>
-          <Grid.Column width={3}> </Grid.Column>
-          <Grid.Column width={10} align="center">
-            Placeholder for Spymaster Component
-          </Grid.Column>
-          <Grid.Column width={3}> </Grid.Column>
-        </Grid.Row>
-      </Grid>
-    );
+  render() {
+    const { words, scores, spymasterView, clue } = this.state
+    return (
+      <AbsoluteWrapper>
+        <Grid columns={4} centered>
+          <Grid.Row verticalAlign='top'>
+            <Grid.Column width={3}>
+              <Scoreboard scores={scores} />
+            </Grid.Column>
+            <Grid.Column width={10}>
+              <Clue
+                handleClueSubmit={this.handleClueSubmit}
+                spymasterView={spymasterView}
+                clue={clue}
+              />
+              <GameBoard
+                words={words}
+                spymasterView={spymasterView}
+                handleCardSelect={word => this.handleCardSelect(word)}
+              />
+            </Grid.Column>
+            <Grid.Column width={3}>
+              <Timer />
+            </Grid.Column>
+          </Grid.Row>
+
+          <Grid.Row centered columns={16}>
+            <Grid.Column width={3}> </Grid.Column>
+            <Grid.Column width={10} align='center'>
+              Placeholder for Spymaster Component
+            </Grid.Column>
+            <Grid.Column width={3}> </Grid.Column>
+          </Grid.Row>
+        </Grid>
+      </AbsoluteWrapper>
+    )
   }
 }
 
-export default GameContainer;
+export default GameContainer
