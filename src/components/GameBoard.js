@@ -17,22 +17,22 @@ const mapTilesWithColors = props => {
   )
 }
 
-const mapTilesWithSelectedColors = props => {
-  return (
-    <Card.Group itemsPerRow={5}>
-      {props.tiles.map(tile => (
-        <Tile
-          key={tile.id}
-          tile={tile.id === props.selectedTile.id ? props.selectedTile : tile}
-          color={
-            tile.id === props.selectedTile.id ? props.selectedTile.color : 'wcn'
-          }
-          spymasterView={props.spymasterView}
-        />
-      ))}
-    </Card.Group>
-  )
-}
+// const mapTilesWithSelectedColors = props => {
+//   return (
+//     <Card.Group itemsPerRow={5}>
+//       {props.tiles.map(tile => (
+//         <Tile
+//           key={tile.id}
+//           tile={tile.id === props.selectedTile.id ? props.selectedTile : tile}
+//           color={
+//             tile.id === props.selectedTile.id ? props.selectedTile.color : 'wcn'
+//           }
+//           spymasterView={props.spymasterView}
+//         />
+//       ))}
+//     </Card.Group>
+//   )
+// }
 
 const mapTilesNoColors = props => {
   const newArray = props.tiles.map(tile => {
@@ -45,7 +45,7 @@ const mapTilesNoColors = props => {
       {newArray.map(tile => (
         <Tile
           key={tile.id}
-          color='wcn'
+          color={tile.revealedColor ? tile.revealedColor : 'wcn'}
           tile={tile}
           spymasterView={props.spymasterView}
           handleTileSelect={tile => props.handleTileSelect(tile)}
@@ -55,14 +55,19 @@ const mapTilesNoColors = props => {
   )
 }
 
-const GameBoard = props => {
-  if (props.spymasterView && !props.selectedTile.color) {
-    return mapTilesWithColors(props)
-  } else if (!props.spymasterView && props.selectedTile.color) {
-    mapTilesWithSelectedColors(props)
-  } else {
-    return mapTilesNoColors(props)
-  }
-}
+const GameBoard = props =>
+  props.spymasterView
+    ? mapTilesWithColors(props)
+    : mapTilesNoColors(props)
+
+// const GameBoard = props => {
+//   if (props.spymasterView && !props.selectedTile.color) {
+//     return mapTilesWithColors(props)
+//   } else if (!props.spymasterView && props.selectedTile.color) {
+//     mapTilesWithSelectedColors(props)
+//   } else {
+//     return mapTilesNoColors(props)
+//   }
+// }
 
 export default GameBoard

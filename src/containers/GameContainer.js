@@ -16,6 +16,10 @@ const swapTeam = {
   red: 'blue'
 }
 
+const rules = {
+  timer: 15
+}
+
 class GameContainer extends Component {
   state = {
     tiles: [],
@@ -25,8 +29,8 @@ class GameContainer extends Component {
     guesses: 0,
     activeTeam: '',
     gameId: null,
-    selectedTile: {},
-    timer: 15,
+    // selectedTile: {}, (this is commented out because it was passed down as prop without ever being modified)
+    timer: rules.timer,
     runTimer: true
   }
 
@@ -39,19 +43,18 @@ class GameContainer extends Component {
   startGame = () => fetch(startUrl).then(resp => resp.json())
 
   setInitialState = data => {
-    const blueTiles = data.tiles.filter(w => w.color === 'blue')
-    const redTiles = data.tiles.filter(w => w.color === 'red')
-    blueTiles.length > redTiles.length
-      ? this.setState({
-          activeTeam: 'blue',
-          tiles: data.tiles,
-          gameId: data.id
-        })
-      : this.setState({
-          activeTeam: 'red',
-          tiles: data.tiles,
-          gameId: data.id
-        })
+    let { tiles } = data
+    // add a REVEALED_COLOR attribute to tiles so that GameContainer + GameBoard know which ones have been guessed already
+    tiles.forEach(tile => tile.revealedColor = null)
+    let activeTeam = ''
+    const gameId = data.id
+
+
+    const blueTiles = tiles.filter(w => w.color === 'blue')
+    const redTiles = tiles.filter(w => w.color === 'red')
+    blueTiles.length > redTiles.length ? activeTeam = 'blue' : activeTeam = 'red'
+
+    this.setState({ activeTeam, tiles, gameId })
   }
 
   handleClueSubmit = event => {
@@ -66,9 +69,15 @@ class GameContainer extends Component {
   }
 
   handleTileSelect = tile => {
-    return this.getGame()
-      .then(() => this.findTileOnServer(tile))
-      .then(selectedTile => this.checkTileStatus(selectedTile))
+    return this.findTileOnServer(tile)
+      .then(serverTile => {
+        // here we have to change the selected tile in state.tiles, without mutating state directly...
+        const tiles = [...this.state.tiles]
+        const tileToUpdate = tiles.find(t => t.id === tile.id)
+        tileToUpdate.revealedColor = serverTile.color
+        this.setState({ tiles })
+        return this.checkTileColor(serverTile)
+      })
       .then(result =>
         result
           ? this.increaseGuesses()
@@ -77,27 +86,34 @@ class GameContainer extends Component {
   }
 
   getGame = () =>
-    fetch(gamesUrl + `/${this.state.gameId}`).then(resp => resp.json())
+    fetch(gamesUrl + `/${this.state.gameId}`)
+      .then(resp => resp.json())
+      .then(game => {
+        const orderedTiles = { ...game, tiles: game.tiles.sort((a, b) => a.id - b.id) }
+        return orderedTiles
+      })
 
-  findTileOnServer = tile => {
-    return this.getGame().then(data => data.tiles.find(t => t.id === tile.id))
-  }
+  findTileOnServer = tile =>
+    this.getGame().then(game => game.tiles.find(t => t.id === tile.id))
 
-  checkTileStatus = selectedTile => {
+  checkTileColor = selectedTile => {
     switch (selectedTile.color) {
       case this.state.activeTeam:
+        console.log("Correct guess!")
         this.addScore(this.state.activeTeam)
         return true // pass back to handleTileSelect to increaseGuesses etc
       case swapTeam[this.state.activeTeam]:
-        console.log("Other team's tile!")
-        this.addScore(this.swapTeam[this.state.activeTeam])
+        console.log("Wrong guess: enemy tile!")
+        this.addScore(swapTeam[this.state.activeTeam])
+        this.endTurn()
         return true
       case 'assassin':
         console.log('You picked the assassin.')
         return false
       default:
         //yellow tile
-        console.log('Wrong guess, move on')
+        console.log('Wrong guess: neutral tile')
+        this.endTurn()
         return true
     }
   }
@@ -112,10 +128,14 @@ class GameContainer extends Component {
   increaseGuesses = () => {
     const guesses = this.state.guesses + 1
     this.setState({ guesses })
-    if (!(guesses < parseInt(this.state.clue['numberClue'], 10))) {
-      this.swapTeam()
-      this.getGame().then(data => this.restoreSpymasterView(data))
+    if (!(guesses <= parseInt(this.state.clue['numberClue'], 10))) {
+      this.endTurn()
     }
+  }
+
+  endTurn = () => {
+    this.swapTeam()
+    this.getGame().then(game => this.restoreSpymasterView(game))
   }
 
   swapTeam = () => {
@@ -124,9 +144,13 @@ class GameContainer extends Component {
     this.setState({ activeTeam: swapTeam[team], timer })
   }
 
-  restoreSpymasterView = data => {
+  restoreSpymasterView = game => {
+    // instead of overwriting the tiles, we keep their revealedColor property that we added on game start.
+    const tiles = [ ...this.state.tiles ]
+    tiles.forEach((tile, i) => tile.color = game.tiles[i].color)
+
     this.setState({
-      tiles: data.tiles,
+      tiles,
       spymasterView: !this.state.spymasterView,
       guesses: 0,
       clue: { numberClue: null, textClue: null }
@@ -149,10 +173,10 @@ class GameContainer extends Component {
     this.swapTeam()
     if (this.state.spymasterView) {
       //spymaster's turn but didn't give clue, swap team and keep spymasterview
-      this.setState({ timer: 15 })
+      this.setState({ timer: rules.timer })
     } else {
       //players turn, didn't pick card, swap team and change to spymasterview
-      this.setState({ spymasterView: !this.state.spymasterView, timer: 15 })
+      this.getGame().then(game => this.restoreSpymasterView(game))
     }
   }
 
@@ -173,8 +197,7 @@ class GameContainer extends Component {
               <h1>
                 {this.state.spymasterView ? 'Spymaster View' : 'Players View'}
               </h1>
-              <h2>Game ID: {this.state.gameId}</h2>
-              <h2>{this.state.activeTeam}</h2>
+              <h5>Game ID: {this.state.gameId}</h5>
               <Clue
                 handleClueSubmit={this.handleClueSubmit}
                 spymasterView={spymasterView}
@@ -182,7 +205,7 @@ class GameContainer extends Component {
               />
               <GameBoard
                 tiles={tiles}
-                selectedTile={this.state.selectedTile}
+                // selectedTile={this.state.selectedTile}
                 spymasterView={spymasterView}
                 handleTileSelect={tile => this.handleTileSelect(tile)}
               />
