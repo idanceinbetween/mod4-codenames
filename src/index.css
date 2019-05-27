@@ -1,14 +1,14 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
 
@@ -36,41 +36,53 @@ code {
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
 }
 
-.cards.ui .card {
-  background-image: url("pix/manonPeteSmall.jpg");
-  background-size: 100%;
-  height: 10vh;
-}
-
-.cnWord {
-  color: white;
-}
-
-.ui.header {
-  /* border: none;
+/* .ui.header {
+  border: none;
   margin: calc(2rem -  0.14285714em ) 0em 1rem;
   padding: 0em 0em;
   font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-weight: bold;
   line-height: 1.28571429em;
-  text-transform: none; */
+  text-transform: none;
   color: rgba(250, 250, 250, 0.87);
+} */
+
+.cnWord {
+  color: white;
+  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-weight: bold;
 }
 
-.card,
-.blue {
-  background-image: url("pix/guyAzam.jpg");
-  background-size: 100%;
+.ui.cards > .cnWordb {
+  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-weight: bold;
+  font-size: 1.5em;
+  text-align: center;
+  color: black;
 }
 
-.card,
-.white {
-  background-image: url("pix/jxMoses.jpg");
+.cards.ui .card.tile {
   background-size: 100%;
+  height: 10vh;
+  line-height: 10vh;
 }
 
-.card,
-.black {
-  background-image: url("pix/peteAssassin.jpg");
-  background-size: 100%;
+.cards.ui .card.tile.wcn {
+  background-image: url('pix/diogoWhitey.jpg');
+}
+
+.cards.ui .card.tile.rcn {
+  background-image: url('pix/manonPeteSmall.jpg');
+}
+
+.cards.ui .card.tile.bcn {
+  background-image: url('pix/guyAzam.jpg');
+}
+
+.cards.ui .card.tile.ycn {
+  background-image: url('pix/jxMoses.jpg');
+}
+
+.cards.ui .card.tile.acn {
+  background-image: url('pix/peteAssassin.jpg');
 }
