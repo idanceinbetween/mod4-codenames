@@ -17,13 +17,14 @@ const swapTeam = {
 
 class GameContainer extends Component {
   state = {
-    words: [],
+    tiles: [],
     scores: { red: 0, blue: 0 },
     spymasterView: true,
     clue: { numberClue: null, textClue: null },
     guesses: 0,
     activeTeam: null,
-    gameId: null
+    gameId: null,
+    selectedTile: {}
   }
 
   componentDidMount() {
@@ -35,17 +36,17 @@ class GameContainer extends Component {
   startGame = () => fetch(startUrl).then(resp => resp.json())
 
   setInitialState = data => {
-    const blueWords = data.tiles.filter(w => w.color === 'blue')
-    const redWords = data.tiles.filter(w => w.color === 'red')
-    blueWords.length > redWords.length
+    const blueTiles = data.tiles.filter(w => w.color === 'blue')
+    const redTiles = data.tiles.filter(w => w.color === 'red')
+    blueTiles.length > redTiles.length
       ? this.setState({
           activeTeam: 'blue',
-          words: data.tiles,
+          tiles: data.tiles,
           gameId: data.id
         })
       : this.setState({
           activeTeam: 'red',
-          words: data.tiles,
+          tiles: data.tiles,
           gameId: data.id
         })
   }
@@ -63,6 +64,7 @@ class GameContainer extends Component {
 
   increaseGuesses = () => {
     const guesses = this.state.guesses + 1
+    debugger
     this.setState({ guesses })
     if (!(guesses < parseInt(this.state.clue['numberClue'], 10))) {
       this.swapTeam()
@@ -72,7 +74,7 @@ class GameContainer extends Component {
 
   restoreSpymasterView = data => {
     this.setState({
-      words: data.tiles,
+      tiles: data.tiles,
       spymasterView: !this.state.spymasterView,
       guesses: 0,
       clue: { numberClue: null, textClue: null }
@@ -90,17 +92,16 @@ class GameContainer extends Component {
   getGame = () =>
     fetch(gamesUrl + `/${this.state.gameId}`).then(resp => resp.json())
 
-  findWordOnServer = word => {
+  findTileOnServer = tile => {
     return this.getGame()
-      .then(data => data.tiles.find(w => w.word === word.word))
-      .then(foundWord => {
-        switch (foundWord.color) {
+      .then(data => data.tiles.find(t => t.id === tile.id))
+      .then(foundTile => {
+        switch (foundTile.color) {
           case this.state.activeTeam:
-            console.log('Correct Guess!')
             this.addScore(this.state.activeTeam)
             return true // pass back to handleCardSelect to increaseGuesses etc
           case swapTeam[this.state.activeTeam]:
-            console.log("Other team's word!")
+            console.log("Other team's tile!")
             this.addScore(this.swapTeam[this.state.activeTeam])
             return true
           case 'assassin':
@@ -109,6 +110,7 @@ class GameContainer extends Component {
           default:
             //yellow tile
             console.log('wrong guess')
+
             return true
         }
       })
@@ -144,14 +146,14 @@ class GameContainer extends Component {
     this.setState({ activeTeam: swapTeam[team] })
   }
 
-  handleCardSelect = word => {
-    this.findWordOnServer(word).then(result => {
+  handleCardSelect = tile => {
+    this.findTileOnServer(tile).then(result => {
       result ? this.increaseGuesses() : console.log('game ends')
     })
   }
 
   render() {
-    const { words, scores, spymasterView, clue } = this.state
+    const { tiles, scores, spymasterView, clue } = this.state
     return (
       <Grid columns={4} centered>
         <Grid.Row verticalAlign='top'>
@@ -169,9 +171,10 @@ class GameContainer extends Component {
               clue={clue}
             />
             <GameBoard
-              words={words}
+              tiles={tiles}
+              selectedTile={this.state.selectedTile}
               spymasterView={spymasterView}
-              handleCardSelect={word => this.handleCardSelect(word)}
+              handleCardSelect={tile => this.handleCardSelect(tile)}
             />
           </Grid.Column>
           <Grid.Column width={3}>{/* <Timer /> */}</Grid.Column>

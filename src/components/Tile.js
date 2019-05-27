@@ -1,8 +1,8 @@
 import React, { Component, Fragment } from 'react'
 import { Card } from 'semantic-ui-react'
 
-class WordCard extends Component {
-  state = { hit: false }
+class Tile extends Component {
+  state = { hit: false, color: this.props.color }
 
   checkSelect = () => {
     if (!this.props.spymasterView) {
@@ -13,15 +13,18 @@ class WordCard extends Component {
 
   render() {
     const { word } = this.props
-    // const { word, color } = this.props.word;
     return (
       <Fragment>
-        {!this.state.hit ? (
-          <Card className='cnWordb tile wcn' onClick={this.checkSelect}>
+        {!this.state.hit ? ( //check if card is not hit yet
+          <Card
+            className={`cnWord tile ${this.props.color} blackText`}
+            onClick={this.checkSelect}
+          >
             <Card.Header>{word.word}</Card.Header>
           </Card>
         ) : (
-          <Card className='cnWord rcn'>
+          //if card is hit
+          <Card className={`cnWord tile ${this.props.color}`}>
             <Card.Header>{''}</Card.Header>
           </Card>
         )}
@@ -30,4 +33,4 @@ class WordCard extends Component {
   }
 }
 
-export default WordCard
+export default Tile

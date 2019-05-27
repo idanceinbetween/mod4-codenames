@@ -48,18 +48,24 @@ code {
 } */
 
 .cnWord {
-  color: white;
   font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-weight: bold;
+  font-size: 1.5em;
+  text-align: center;
+  color: white;
 }
 
-.ui.cards > .cnWordb {
+.cnWord .blackText {
+  color: black;
+}
+
+/* .ui.cards > .cnWordb {
   font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-weight: bold;
   font-size: 1.5em;
   text-align: center;
   color: black;
-}
+} */
 
 .cards.ui .card.tile {
   background-size: 100%;
@@ -71,18 +77,18 @@ code {
   background-image: url('pix/diogoWhitey.jpg');
 }
 
-.cards.ui .card.tile.rcn {
+.cards.ui .card.tile.red {
   background-image: url('pix/manonPeteSmall.jpg');
 }
 
-.cards.ui .card.tile.bcn {
+.cards.ui .card.tile.blue {
   background-image: url('pix/guyAzam.jpg');
 }
 
-.cards.ui .card.tile.ycn {
+.cards.ui .card.tile.yellow {
   background-image: url('pix/jxMoses.jpg');
 }
 
-.cards.ui .card.tile.acn {
+.cards.ui .card.tile.assassin {
   background-image: url('pix/peteAssassin.jpg');
 }
