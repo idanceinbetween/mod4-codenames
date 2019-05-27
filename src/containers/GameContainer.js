@@ -51,7 +51,7 @@ class GameContainer extends Component {
         })
   }
 
-  handleClueSubmit = event =
+  handleClueSubmit = event => {
     this.setState({
       clue: {
         ...this.state.clue,
@@ -67,7 +67,9 @@ class GameContainer extends Component {
       .then(() => this.findTileOnServer(tile))
       .then(selectedTile => this.checkTileStatus(selectedTile))
       .then(result =>
-        result ? this.increaseGuesses() : console.log('game ends, you found the assassin!')
+        result
+          ? this.increaseGuesses()
+          : console.log('game ends, you found the assassin!')
       )
   }
 
@@ -138,48 +140,45 @@ class GameContainer extends Component {
   //   }
   // });
 
-
-
   render() {
-
     const { tiles, scores, spymasterView, clue } = this.state
     return (
-            <AbsoluteWrapper>
-      <Grid columns={4} centered>
-        <Grid.Row verticalAlign='top'>
-          <Grid.Column width={3}>
-            <Scoreboard scores={scores} />
-          </Grid.Column>
-          <Grid.Column width={10}>
-            <h1>
-              {this.state.spymasterView ? 'Spymaster View' : 'Players View'}
-            </h1>
-            <h2>Game ID: {this.state.gameId}</h2>
-            <h2>{this.state.activeTeam}</h2>
-            <Clue
-              handleClueSubmit={this.handleClueSubmit}
-              spymasterView={spymasterView}
-              clue={clue}
-            />
-            <GameBoard
-              tiles={tiles}
-              selectedTile={this.state.selectedTile}
-              spymasterView={spymasterView}
-              handleTileSelect={tile => this.handleTileSelect(tile)}
-            />
-          </Grid.Column>
-          <Grid.Column width={3}>{/* <Timer /> */}</Grid.Column>
-        </Grid.Row>
+      <AbsoluteWrapper>
+        <Grid columns={4} centered>
+          <Grid.Row verticalAlign='top'>
+            <Grid.Column width={3}>
+              <Scoreboard scores={scores} />
+            </Grid.Column>
+            <Grid.Column width={10}>
+              <h1>
+                {this.state.spymasterView ? 'Spymaster View' : 'Players View'}
+              </h1>
+              <h2>Game ID: {this.state.gameId}</h2>
+              <h2>{this.state.activeTeam}</h2>
+              <Clue
+                handleClueSubmit={this.handleClueSubmit}
+                spymasterView={spymasterView}
+                clue={clue}
+              />
+              <GameBoard
+                tiles={tiles}
+                selectedTile={this.state.selectedTile}
+                spymasterView={spymasterView}
+                handleTileSelect={tile => this.handleTileSelect(tile)}
+              />
+            </Grid.Column>
+            <Grid.Column width={3}>{/* <Timer /> */}</Grid.Column>
+          </Grid.Row>
 
-        <Grid.Row centered columns={16}>
-          <Grid.Column width={3}> </Grid.Column>
-          <Grid.Column width={10} align='center'>
-            Placeholder for Spymaster Component
-          </Grid.Column>
-          <Grid.Column width={3}> </Grid.Column>
-        </Grid.Row>
-      </Grid>
-          </AbsoluteWrapper>
+          <Grid.Row centered columns={16}>
+            <Grid.Column width={3}> </Grid.Column>
+            <Grid.Column width={10} align='center'>
+              Placeholder for Spymaster Component
+            </Grid.Column>
+            <Grid.Column width={3}> </Grid.Column>
+          </Grid.Row>
+        </Grid>
+      </AbsoluteWrapper>
     )
   }
 }

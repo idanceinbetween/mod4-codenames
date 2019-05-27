@@ -1,30 +1,23 @@
-import React from "react";
-import { Menu } from "semantic-ui-react";
-import { Link } from "react-router-dom";
-
-// const items = [
-//   { key: "home", active: true, name: "Home" },
-//   { key: "start", name: "Start A Game" },
-//   { key: "about", name: "About Us" }
-// ];
+import React from 'react'
+import { Menu } from 'semantic-ui-react'
+import { NavLink } from 'react-router-dom'
 
 const NavBar = () => (
   <div>
-    {/* <Menu items={items} /> */}
     <Menu>
-      <Link to="/" exact>
+      <NavLink to='/' exact>
         Home
-      </Link>
+      </NavLink>
       |
-      <Link to="/games" exact>
+      <NavLink to='/games' exact>
         Games
-      </Link>
+      </NavLink>
       |
-      <Link to="/about" exact>
+      <NavLink to='/about' exact>
         About
-      </Link>
+      </NavLink>
     </Menu>
   </div>
-);
+)
 
-export default NavBar;
+export default NavBar
