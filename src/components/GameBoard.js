@@ -1,4 +1,3 @@
-// import React, { Component } from "react";
 import React from 'react'
 import { Card } from 'semantic-ui-react'
 import Tile from './Tile'

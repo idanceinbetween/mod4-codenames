@@ -5,6 +5,7 @@ import AbsoluteWrapper from '../components/AbsoluteWrapper'
 import GameBoard from '../components/GameBoard'
 import Scoreboard from '../components/Scoreboard'
 import Clue from '../components/Clue'
+import Timer from '../components/Timer'
 
 const baseUrl = 'http://localhost:3007'
 const startUrl = baseUrl + '/start'
@@ -20,11 +21,13 @@ class GameContainer extends Component {
     tiles: [],
     scores: { red: 0, blue: 0 },
     spymasterView: true,
-    clue: { numberClue: null, textClue: null },
+    clue: { numberClue: '', textClue: '' },
     guesses: 0,
-    activeTeam: null,
+    activeTeam: '',
     gameId: null,
-    selectedTile: {}
+    selectedTile: {},
+    timer: 15,
+    runTimer: true
   }
 
   componentDidMount() {
@@ -140,8 +143,20 @@ class GameContainer extends Component {
   //   }
   // });
 
+  handleBomb = () => {
+    console.log("Time's up! Next view.")
+    this.swapTeam()
+    if (this.state.spymasterView) {
+      //spymaster's turn but didn't give clue, swap team and keep spymasterview
+      this.setState({ timer: 15 })
+    } else {
+      //players turn, didn't pick card, swap team and change to spymasterview
+      this.setState({ spymasterView: !this.state.spymasterView, timer: 15 })
+    }
+  }
+
   render() {
-    const { tiles, scores, spymasterView, clue } = this.state
+    const { tiles, scores, spymasterView, clue, timer, activeTeam } = this.state
     return (
       <AbsoluteWrapper>
         <Grid columns={4} centered>
@@ -167,7 +182,14 @@ class GameContainer extends Component {
                 handleTileSelect={tile => this.handleTileSelect(tile)}
               />
             </Grid.Column>
-            <Grid.Column width={3}>{/* <Timer /> */}</Grid.Column>
+            <Grid.Column width={3}>
+              <Timer
+                timer={timer}
+                runTimer={this.state.runTimer}
+                bomb={this.handleBomb}
+                activeTeam={activeTeam}
+              />
+            </Grid.Column>
           </Grid.Row>
 
           <Grid.Row centered columns={16}>
