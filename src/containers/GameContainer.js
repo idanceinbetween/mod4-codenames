@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Grid } from 'semantic-ui-react'
+import { Grid, Button } from 'semantic-ui-react'
 
 import AbsoluteWrapper from '../components/AbsoluteWrapper'
 import GameBoard from '../components/GameBoard'
@@ -120,7 +120,8 @@ class GameContainer extends Component {
 
   swapTeam = () => {
     const team = this.state.activeTeam
-    this.setState({ activeTeam: swapTeam[team] })
+    const timer = this.state.timer
+    this.setState({ activeTeam: swapTeam[team], timer })
   }
 
   restoreSpymasterView = data => {
@@ -153,6 +154,10 @@ class GameContainer extends Component {
       //players turn, didn't pick card, swap team and change to spymasterview
       this.setState({ spymasterView: !this.state.spymasterView, timer: 15 })
     }
+  }
+
+  pauseGame = () => {
+    this.setState({ runTimer: !this.state.runTimer })
   }
 
   render() {
@@ -189,6 +194,9 @@ class GameContainer extends Component {
                 bomb={this.handleBomb}
                 activeTeam={activeTeam}
               />
+              <Button onClick={() => this.pauseGame()}>
+                {this.state.runTimer ? 'Pause Game' : 'Resume Game'}
+              </Button>
             </Grid.Column>
           </Grid.Row>
 

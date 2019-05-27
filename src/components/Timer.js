@@ -21,6 +21,12 @@ class Timer extends Component {
     }
   }
 
+  resetTimer = () => {
+    clearInterval(this.intervalId)
+    this.setState({ timer: this.props.timer })
+    this.intervalId = setInterval(this.timer, 1000)
+  }
+
   componentDidMount() {
     if (this.props.runTimer) {
       this.intervalId = setInterval(this.timer, 1000)
@@ -28,8 +34,15 @@ class Timer extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.runTimer !== this.props.runTimer && this.props.runTimer) {
-      //when timer was stopped and main app asks to activate timer
+    if (
+      prevProps.activeTeam !== this.props.activeTeam &&
+      this.state.timer > 0
+    ) {
+      this.resetTimer()
+    } else if (
+      prevProps.runTimer !== this.props.runTimer &&
+      this.props.runTimer
+    ) {
       this.intervalId = setInterval(this.timer, 1000)
     } else if (this.props.runTimer === false) {
       //when main app asks to pause timer
