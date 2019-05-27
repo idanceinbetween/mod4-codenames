@@ -7,12 +7,12 @@ class Tile extends Component {
   checkSelect = () => {
     if (!this.props.spymasterView) {
       this.setState({ hit: true })
-      this.props.handleCardSelect(this.props.word)
+      this.props.handleCardSelect(this.props.tile)
     }
   }
 
   render() {
-    const { word } = this.props
+    const { tile } = this.props
     return (
       <Fragment>
         {!this.state.hit ? ( //check if card is not hit yet
@@ -20,7 +20,7 @@ class Tile extends Component {
             className={`cnWord tile ${this.props.color} blackText`}
             onClick={this.checkSelect}
           >
-            <Card.Header>{word.word}</Card.Header>
+            <Card.Header>{tile.word}</Card.Header>
           </Card>
         ) : (
           //if card is hit

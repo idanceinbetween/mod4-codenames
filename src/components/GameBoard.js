@@ -10,7 +10,7 @@ const mapTilesWithColors = props => {
         <Tile
           key={tile.id}
           color={tile.color}
-          word={tile}
+          tile={tile}
           spymasterView={props.spymasterView}
         />
       ))}
