@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Grid } from 'semantic-ui-react'
 
+import AbsoluteWrapper from '../components/AbsoluteWrapper'
 import GameBoard from '../components/GameBoard'
 import Scoreboard from '../components/Scoreboard'
 import Clue from '../components/Clue'
@@ -50,7 +51,7 @@ class GameContainer extends Component {
         })
   }
 
-  handleClueSubmit = event => {
+  handleClueSubmit = event =
     this.setState({
       clue: {
         ...this.state.clue,
@@ -66,7 +67,7 @@ class GameContainer extends Component {
       .then(() => this.findTileOnServer(tile))
       .then(selectedTile => this.checkTileStatus(selectedTile))
       .then(result =>
-        result ? this.increaseGuesses() : console.log('game ends')
+        result ? this.increaseGuesses() : console.log('game ends, you found the assassin!')
       )
   }
 
@@ -137,9 +138,13 @@ class GameContainer extends Component {
   //   }
   // });
 
+
+
   render() {
+
     const { tiles, scores, spymasterView, clue } = this.state
     return (
+            <AbsoluteWrapper>
       <Grid columns={4} centered>
         <Grid.Row verticalAlign='top'>
           <Grid.Column width={3}>
@@ -174,6 +179,7 @@ class GameContainer extends Component {
           <Grid.Column width={3}> </Grid.Column>
         </Grid.Row>
       </Grid>
+          </AbsoluteWrapper>
     )
   }
 }

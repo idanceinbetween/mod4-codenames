@@ -7,8 +7,12 @@ class Clue extends Component {
   handleChange = (e, { name, value }) => this.setState({ [name]: value });
 
   handleSubmit = e => {
-    this.setState({ numberClue: "", textClue: "" });
-    this.props.handleClueSubmit(e);
+    if (e.target["numberClue"].value || e.target["textClue"].value) {
+      this.setState({ numberClue: "", textClue: "" });
+      this.props.handleClueSubmit(e);
+    } else {
+      alert("Please complete both clues.");
+    }
   };
 
   render() {

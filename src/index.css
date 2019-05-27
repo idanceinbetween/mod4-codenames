@@ -16,7 +16,15 @@ body {
   display: grid;
   grid-template-columns: 2fr 2fr 2fr 2fr 2fr;
 }
-/* 
+
+.position-absolute {
+  position: absolute !important;
+}
+
+.w-100 {
+  width: 100% !important;
+}
+
 .word-box {
   margin: 20px;
   position: relative;
