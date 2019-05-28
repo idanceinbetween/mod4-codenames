@@ -6,6 +6,7 @@ import GameBoard from '../components/GameBoard'
 import Scoreboard from '../components/Scoreboard'
 import Clue from '../components/Clue'
 import Timer from '../components/Timer'
+import LogPanel from '../components/LogPanel'
 
 const baseUrl = 'http://localhost:3007'
 const startUrl = baseUrl + '/start'
@@ -30,7 +31,8 @@ class GameContainer extends Component {
     activeTeam: '',
     gameId: null,
     timer: rules.timer,
-    runTimer: true
+    runTimer: true,
+    errorMessage: ''
   }
 
   componentDidMount() {
@@ -189,8 +191,23 @@ class GameContainer extends Component {
     this.setState({ runTimer: !this.state.runTimer })
   }
 
+  handleErrorMessage = message => {
+    this.setState({ message })
+  }
+
   render() {
-    const { tiles, scores, spymasterView, clue, timer, activeTeam } = this.state
+    const {
+      tiles,
+      scores,
+      spymasterView,
+      clue,
+      timer,
+      activeTeam,
+      gameId,
+      errorMessage,
+      guesses
+    } = this.state
+
     return (
       <AbsoluteWrapper>
         <Grid columns={4} centered>
@@ -199,10 +216,14 @@ class GameContainer extends Component {
               <Scoreboard scores={scores} />
             </Grid.Column>
             <Grid.Column width={10}>
-              <h1>
-                {this.state.spymasterView ? 'Spymaster View' : 'Players View'}
-              </h1>
-              <h5>Game ID: {this.state.gameId}</h5>
+              <LogPanel
+                spymasterView={spymasterView}
+                gameId={gameId}
+                activeTeam={activeTeam}
+                errorMessage={errorMessage}
+                canGuess={parseInt(clue['numberClue'], 10) + 1}
+                guesses={guesses}
+              />
               <Clue
                 handleClueSubmit={this.handleClueSubmit}
                 spymasterView={spymasterView}
@@ -210,7 +231,6 @@ class GameContainer extends Component {
               />
               <GameBoard
                 tiles={tiles}
-                // selectedTile={this.state.selectedTile}
                 spymasterView={spymasterView}
                 handleTileSelect={tile => this.handleTileSelect(tile)}
               />
