@@ -16,6 +16,7 @@ const SwapViewModal = props => {
       centered
     >
       <Modal.Content>
+        <h2 align='center'>{props.logMessage}</h2>
         <h1 align='center'>
           Team {props.activeTeam.toUpperCase()}, your turn has ended.
           <br />

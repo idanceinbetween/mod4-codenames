@@ -110,12 +110,12 @@ class GameContainer extends Component {
         this.addScore(this.state.activeTeam)
         return 'continue' // pass back to handleTileSelect to increaseGuesses etc
       case swapTeam[this.state.activeTeam]:
-        this.handleLogMessage('Wrong guess: enemy tile! Turn ends now.')
+        this.handleLogMessage('Wrong guess: enemy tile!')
         this.addScore(swapTeam[this.state.activeTeam])
         return 'endTurn'
       case 'yellow':
         //yellow tile
-        this.handleLogMessage('Wrong guess: neutral tile. Turn ends now.')
+        this.handleLogMessage('Wrong guess: neutral tile.')
         return 'endTurn'
       case 'assassin':
         this.handleLogMessage('You picked the assassin. Game over!')
@@ -269,6 +269,7 @@ class GameContainer extends Component {
           activeTeam={activeTeam}
           openModal={this.state.openModal}
           closeModal={this.closeModal}
+          logMessage={logMessage}
         />
       </AbsoluteWrapper>
     )
