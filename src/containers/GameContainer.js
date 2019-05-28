@@ -144,19 +144,18 @@ class GameContainer extends Component {
   }
 
   endTurn = () => {
-    this.setState({ openModal: true })
+    this.setState({ openModal: true, runTimer: false })
   }
 
   closeModal = () => {
-    this.setState({ openModal: false })
+    this.setState({ openModal: false, runTimer: true })
     this.swapTeam()
     this.getGame().then(game => this.restoreSpymasterView(game))
   }
 
   swapTeam = () => {
     const team = this.state.activeTeam
-    const timer = this.state.timer
-    this.setState({ activeTeam: swapTeam[team], timer })
+    this.setState({ activeTeam: swapTeam[team] })
   }
 
   restoreSpymasterView = game => {
@@ -247,7 +246,7 @@ class GameContainer extends Component {
             </Grid.Column>
             <Grid.Column width={3}>
               <Timer
-                timer={timer}
+                timer={rules.timer}
                 runTimer={this.state.runTimer}
                 bomb={this.handleBomb}
               />
