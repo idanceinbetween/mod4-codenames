@@ -6,6 +6,7 @@ import GameBoard from '../components/GameBoard'
 import Scoreboard from '../components/Scoreboard'
 import Clue from '../components/Clue'
 import Timer from '../components/Timer'
+import LogPanel from '../components/LogPanel'
 
 const baseUrl = 'http://localhost:3007'
 const startUrl = baseUrl + '/start'
@@ -30,7 +31,8 @@ class GameContainer extends Component {
     activeTeam: '',
     gameId: null,
     timer: rules.timer,
-    runTimer: true
+    runTimer: true,
+    logMessage: ''
   }
 
   componentDidMount() {
@@ -102,19 +104,19 @@ class GameContainer extends Component {
   checkTileColorAndCalculateScore = selectedTile => {
     switch (selectedTile.color) {
       case this.state.activeTeam:
-        console.log('Correct guess!')
+        this.handleLogMessage('Hit!')
         this.addScore(this.state.activeTeam)
         return 'continue' // pass back to handleTileSelect to increaseGuesses etc
       case swapTeam[this.state.activeTeam]:
-        console.log('Wrong guess: enemy tile!')
+        this.handleLogMessage('Wrong guess: enemy tile! Turn ends now.')
         this.addScore(swapTeam[this.state.activeTeam])
         return 'endTurn'
       case 'yellow':
         //yellow tile
-        console.log('Wrong guess: neutral tile')
+        this.handleLogMessage('Wrong guess: neutral tile. Turn ends now.')
         return 'endTurn'
       case 'assassin':
-        console.log('You picked the assassin.')
+        this.handleLogMessage('You picked the assassin. Game over!')
         return false
     }
   }
@@ -167,7 +169,7 @@ class GameContainer extends Component {
   // .catch(err => {
   //   if (err.text) {
   //     err.text().then(errorMessage => {
-  //       this.props.dispatch(displayTheError(errorMessage));
+  //       this.props.dispatch(displayTheError(logMessage));
   //     });
   //   } else {
   //     this.props.dispatch(displayTheError("There was an error.")); // Hardcoded error here
@@ -189,8 +191,25 @@ class GameContainer extends Component {
     this.setState({ runTimer: !this.state.runTimer })
   }
 
+  handleLogMessage = message => {
+    const a = new Date()
+    const logMessage = message + ` [${a.toLocaleTimeString()}]`
+    this.setState({ logMessage })
+  }
+
   render() {
-    const { tiles, scores, spymasterView, clue, timer, activeTeam } = this.state
+    const {
+      tiles,
+      scores,
+      spymasterView,
+      clue,
+      timer,
+      activeTeam,
+      gameId,
+      logMessage,
+      guesses
+    } = this.state
+
     return (
       <AbsoluteWrapper>
         <Grid columns={4} centered>
@@ -199,18 +218,22 @@ class GameContainer extends Component {
               <Scoreboard scores={scores} />
             </Grid.Column>
             <Grid.Column width={10}>
-              <h1>
-                {this.state.spymasterView ? 'Spymaster View' : 'Players View'}
-              </h1>
-              <h5>Game ID: {this.state.gameId}</h5>
+              <LogPanel
+                spymasterView={spymasterView}
+                gameId={gameId}
+                activeTeam={activeTeam}
+                logMessage={logMessage}
+              />
               <Clue
                 handleClueSubmit={this.handleClueSubmit}
                 spymasterView={spymasterView}
                 clue={clue}
+                canGuess={parseInt(clue['numberClue'], 10) + 1}
+                guesses={guesses}
+                handleLogMessage={str => this.handleLogMessage(str)}
               />
               <GameBoard
                 tiles={tiles}
-                // selectedTile={this.state.selectedTile}
                 spymasterView={spymasterView}
                 handleTileSelect={tile => this.handleTileSelect(tile)}
               />
@@ -220,8 +243,8 @@ class GameContainer extends Component {
                 timer={timer}
                 runTimer={this.state.runTimer}
                 bomb={this.handleBomb}
-                activeTeam={activeTeam}
               />
+              <br />
               <Button onClick={() => this.pauseGame()}>
                 {this.state.runTimer ? 'Pause Game' : 'Resume Game'}
               </Button>
@@ -230,9 +253,7 @@ class GameContainer extends Component {
 
           <Grid.Row centered columns={16}>
             <Grid.Column width={3}> </Grid.Column>
-            <Grid.Column width={10} align='center'>
-              Placeholder for Spymaster Component
-            </Grid.Column>
+            <Grid.Column width={10} align='center' />
             <Grid.Column width={3}> </Grid.Column>
           </Grid.Row>
         </Grid>

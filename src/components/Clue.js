@@ -8,11 +8,25 @@ class Clue extends Component {
 
   handleSubmit = e => {
     const result = this.validateInput(e)
-    if (result) {
-      this.setState({ numberClue: '', textClue: '' })
-      this.props.handleClueSubmit(e)
-    } else {
-      alert('Please write correct input or complete both clues.')
+
+    switch (result) {
+      case 'checkType':
+        this.props.handleLogMessage(
+          'Please check your input: Is number clue a number? Is text clue a word?'
+        )
+        break
+      case 'numberValueAndSingleWord':
+        this.props.handleLogMessage(
+          'Please ensure number clue is a number between 1 and 9, and text clue is a single word!'
+        )
+        break
+      case 'notEmpty':
+        this.props.handleLogMessage('Please do not leave fields empty.')
+        break
+      case 'true':
+        this.setState({ numberClue: '', textClue: '' })
+        this.props.handleClueSubmit(e)
+        break
     }
   }
 
@@ -26,12 +40,20 @@ class Clue extends Component {
       numberClue > 0 && numberClue <= 9 && !textClue.includes(' ')
     const notEmpty = textClue.length > 0
 
-    return checkType && numberValueAndSingleWord && notEmpty
+    if (!checkType) {
+      return 'checkType'
+    } else if (!numberValueAndSingleWord) {
+      return 'numberValueAndSingleWord'
+    } else if (!notEmpty) {
+      return 'notEmpty'
+    } else {
+      return 'true'
+    }
   }
 
   render() {
     const { numberClue, textClue } = this.state
-    const { spymasterView, clue } = this.props
+    const { spymasterView, clue, canGuess, guesses } = this.props
 
     return (
       <Fragment>
@@ -59,13 +81,19 @@ class Clue extends Component {
           </Segment>
         )}
         {!spymasterView && (
-          <Segment inverted>
-            Number Clue: {clue.numberClue}
-            <br />
-            Text Clue: {clue.textClue}
-            <br />
-            PICK YOUR GUESSES NOW!
-          </Segment>
+          <Segment.Group horizontal>
+            <Segment inverted color='olive'>
+              <h3>Number Clue:</h3> {clue.numberClue}
+            </Segment>
+            <Segment inverted color='olive'>
+              <h3>Text Clue:</h3> {clue.textClue}
+            </Segment>
+            {!isNaN(canGuess) && (
+              <Segment inverted color='teal'>
+                <h3>Remaining guesses:</h3> {canGuess - guesses}
+              </Segment>
+            )}
+          </Segment.Group>
         )}
       </Fragment>
     )
