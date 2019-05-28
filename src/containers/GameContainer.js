@@ -81,7 +81,7 @@ class GameContainer extends Component {
       .then(result =>
         result
           ? this.increaseGuesses(result)
-          : console.log('game ends, you found the assassin!')
+          : this.triggerGameOver()
       )
   }
 
@@ -117,6 +117,10 @@ class GameContainer extends Component {
         console.log('You picked the assassin.')
         return false
     }
+  }
+
+  triggerGameOver = () => {
+    console.log("YOU LOSE")
   }
 
   addScore = team => {
