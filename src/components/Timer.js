@@ -12,6 +12,7 @@ class Timer extends Component {
     })
 
     if (this.state.timer < 1) {
+      // automatically updates time when team swaps
       clearInterval(this.intervalId)
       this.props.bomb()
       this.setState({ timer: this.props.timer })

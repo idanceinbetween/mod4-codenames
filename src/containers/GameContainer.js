@@ -246,8 +246,9 @@ class GameContainer extends Component {
             </Grid.Column>
             <Grid.Column width={3}>
               <Timer
-                timer={rules.timer}
+                timer={timer}
                 runTimer={this.state.runTimer}
+                activeTeam={activeTeam}
                 bomb={this.handleBomb}
               />
               <br />
