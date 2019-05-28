@@ -4,15 +4,34 @@ import { Button, Form, Segment } from 'semantic-ui-react'
 class Clue extends Component {
   state = { numberClue: '', textClue: '' }
 
+  /* possible terrible inputs 
+Number field: "a", 0, empty, -4, 1+, 1*91o
+Text field: 2, "two words", empty
+  */
+
   handleChange = (e, { name, value }) => this.setState({ [name]: value })
 
   handleSubmit = e => {
-    if (e.target['numberClue'].value || e.target['textClue'].value) {
+    const result = this.validateInput(e)
+    if (result) {
       this.setState({ numberClue: '', textClue: '' })
       this.props.handleClueSubmit(e)
     } else {
-      alert('Please complete both clues.')
+      alert('Please write correct input or complete both clues.')
     }
+  }
+
+  validateInput = e => {
+    const numberClue = parseInt(e.target['numberClue'].value)
+    const textClue = e.target['textClue'].value
+
+    const checkType =
+      Number.isInteger(numberClue) && textClue.constructor === String
+    const numberValueAndSingleWord =
+      numberClue > 0 && numberClue <= 9 && !textClue.includes(' ')
+    const notEmpty = textClue.length > 0
+
+    return checkType && numberValueAndSingleWord && notEmpty
   }
 
   render() {
