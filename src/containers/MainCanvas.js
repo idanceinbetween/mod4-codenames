@@ -5,6 +5,7 @@ import { useTransition, animated } from 'react-spring'
 import About from '../components/About'
 import HomeContainer from './HomeContainer'
 import GameContainer from './GameContainer'
+import WordManager from '../components/WordManager'
 
 const MainCanvas = () => {
   const { location } = useContext(__RouterContext)
@@ -23,7 +24,7 @@ const MainCanvas = () => {
             <Route exact path='/' component={HomeContainer} />
             <Route exact path='/games' component={GameContainer} />
             <Route exact path='/about' render={About} />
-            {/* <Route exact path='/wordman' render={WordManager} /> */}
+            <Route exact path='/wordman' component={WordManager} />
             <Route
               component={() => (
                 <h1>
