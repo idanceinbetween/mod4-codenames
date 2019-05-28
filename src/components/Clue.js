@@ -17,7 +17,7 @@ class Clue extends Component {
         break
       case 'numberValueAndSingleWord':
         this.props.handleLogMessage(
-          'Please ensure number clue is a number between 1 and 9, and text clue is a single word!'
+          'Please ensure number clue is a number between 1 and 8, and text clue is a single word!'
         )
         break
       case 'notEmpty':

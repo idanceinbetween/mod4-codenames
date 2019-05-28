@@ -83,3 +83,10 @@ body {
 .cards.ui .card.tile.assassin {
   background-image: url('pix/peteAssassin.jpg');
 }
+
+.ui.page.modals.dimmer.transition.visible.active {
+  display: flex !important;
+}
+.ui.modal > .actions {
+  text-align: center;
+}

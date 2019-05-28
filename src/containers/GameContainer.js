@@ -7,6 +7,7 @@ import Scoreboard from '../components/Scoreboard'
 import Clue from '../components/Clue'
 import Timer from '../components/Timer'
 import LogPanel from '../components/LogPanel'
+import SwapViewModal from '../components/SwapViewModal'
 
 const baseUrl = 'http://localhost:3007'
 const startUrl = baseUrl + '/start'
@@ -32,7 +33,8 @@ class GameContainer extends Component {
     gameId: null,
     timer: rules.timer,
     runTimer: true,
-    logMessage: ''
+    logMessage: '',
+    openModal: false
   }
 
   componentDidMount() {
@@ -142,6 +144,11 @@ class GameContainer extends Component {
   }
 
   endTurn = () => {
+    this.setState({ openModal: true })
+  }
+
+  closeModal = () => {
+    this.setState({ openModal: false })
     this.swapTeam()
     this.getGame().then(game => this.restoreSpymasterView(game))
   }
@@ -257,6 +264,12 @@ class GameContainer extends Component {
             <Grid.Column width={3}> </Grid.Column>
           </Grid.Row>
         </Grid>
+
+        <SwapViewModal
+          activeTeam={activeTeam}
+          openModal={this.state.openModal}
+          closeModal={this.closeModal}
+        />
       </AbsoluteWrapper>
     )
   }
