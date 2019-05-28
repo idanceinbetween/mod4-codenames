@@ -2,21 +2,24 @@ import React, { Fragment } from 'react'
 import { Segment } from 'semantic-ui-react'
 
 const LogPanel = props => {
-  debugger
   return (
     <Fragment>
-      <Segment.Group horizontal>
-        <Segment>Whose turn?: {props.activeTeam} </Segment>
-        {!isNaN(props.canGuess) && (
-          <Segment>
-            Current guesses left: {props.canGuess - props.guesses}
+      <Segment.Group>
+        {props.activeTeam === 'blue' && (
+          <Segment inverted color='blue'>
+            Team <b>{props.activeTeam}</b>, you're up!
+          </Segment>
+        )}
+        {props.activeTeam === 'red' && (
+          <Segment inverted color='red'>
+            Team <b>{props.activeTeam}</b>, you're up!
           </Segment>
         )}
       </Segment.Group>
       <Segment.Group>
-        {props.errorMessage.length > 1 && (
-          <Segment>Error Message: {props.errorMessage}</Segment>
-        )}
+        <Segment color='violet'>
+          Log Message: <b>{props.logMessage}</b>
+        </Segment>
       </Segment.Group>
     </Fragment>
   )

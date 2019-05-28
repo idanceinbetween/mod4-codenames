@@ -56,12 +56,8 @@ class Timer extends Component {
 
   render() {
     const { timer } = this.state
-    const { activeTeam } = this.props
     return (
       <div>
-        <p>
-          <b>Team {activeTeam}, you're up!</b>
-        </p>
         <p>
           <b>Timer</b>
         </p>
