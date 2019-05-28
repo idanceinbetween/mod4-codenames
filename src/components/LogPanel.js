@@ -18,7 +18,7 @@ const LogPanel = props => {
       </Segment.Group>
       <Segment.Group>
         <Segment color='violet'>
-          Log Message: <b>{props.logMessage}</b>
+          <b>Log Message:</b> {props.logMessage}
         </Segment>
       </Segment.Group>
     </Fragment>

@@ -83,14 +83,14 @@ class Clue extends Component {
         {!spymasterView && (
           <Segment.Group horizontal>
             <Segment inverted color='olive'>
-              <b>Number Clue:</b> {clue.numberClue}
-              <br />
-              <b>Text Clue:</b> {clue.textClue}
+              <h3>Number Clue:</h3> {clue.numberClue}
             </Segment>
-
+            <Segment inverted color='olive'>
+              <h3>Text Clue:</h3> {clue.textClue}
+            </Segment>
             {!isNaN(canGuess) && (
               <Segment inverted color='teal'>
-                Current guesses left: <b>{canGuess - guesses}</b>
+                <h3>Remaining guesses:</h3> {canGuess - guesses}
               </Segment>
             )}
           </Segment.Group>

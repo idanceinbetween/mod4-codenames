@@ -104,19 +104,19 @@ class GameContainer extends Component {
   checkTileColorAndCalculateScore = selectedTile => {
     switch (selectedTile.color) {
       case this.state.activeTeam:
-        this.setState({ logMessage: 'Hit!' })
+        this.handleLogMessage('Hit!')
         this.addScore(this.state.activeTeam)
         return 'continue' // pass back to handleTileSelect to increaseGuesses etc
       case swapTeam[this.state.activeTeam]:
-        this.setState({ logMessage: 'Wrong guess: enemy tile!' })
+        this.handleLogMessage('Wrong guess: enemy tile! Turn ends now.')
         this.addScore(swapTeam[this.state.activeTeam])
         return 'endTurn'
       case 'yellow':
         //yellow tile
-        this.setState({ logMessage: 'Wrong guess: neutral tile' })
+        this.handleLogMessage('Wrong guess: neutral tile. Turn ends now.')
         return 'endTurn'
       case 'assassin':
-        this.setState({ logMessage: 'You picked the assassin. Game over!' })
+        this.handleLogMessage('You picked the assassin. Game over!')
         return false
     }
   }
@@ -191,7 +191,9 @@ class GameContainer extends Component {
     this.setState({ runTimer: !this.state.runTimer })
   }
 
-  handleLogMessage = logMessage => {
+  handleLogMessage = message => {
+    const a = new Date()
+    const logMessage = message + ` [${a.toLocaleTimeString()}]`
     this.setState({ logMessage })
   }
 
