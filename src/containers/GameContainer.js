@@ -29,7 +29,6 @@ class GameContainer extends Component {
     guesses: 0,
     activeTeam: '',
     gameId: null,
-    // selectedTile: {}, (this is commented out because it was passed down as prop without ever being modified)
     timer: rules.timer,
     runTimer: true
   }
@@ -45,14 +44,15 @@ class GameContainer extends Component {
   setInitialState = data => {
     let { tiles } = data
     // add a REVEALED_COLOR attribute to tiles so that GameContainer + GameBoard know which ones have been guessed already
-    tiles.forEach(tile => tile.revealedColor = null)
+    tiles.forEach(tile => (tile.revealedColor = null))
     let activeTeam = ''
     const gameId = data.id
 
-
     const blueTiles = tiles.filter(w => w.color === 'blue')
     const redTiles = tiles.filter(w => w.color === 'red')
-    blueTiles.length > redTiles.length ? activeTeam = 'blue' : activeTeam = 'red'
+    blueTiles.length > redTiles.length
+      ? (activeTeam = 'blue')
+      : (activeTeam = 'red')
 
     this.setState({ activeTeam, tiles, gameId })
   }
@@ -76,11 +76,11 @@ class GameContainer extends Component {
         const tileToUpdate = tiles.find(t => t.id === tile.id)
         tileToUpdate.revealedColor = serverTile.color
         this.setState({ tiles })
-        return this.checkTileColor(serverTile)
+        return this.checkTileColorAndCalculateScore(serverTile)
       })
       .then(result =>
         result
-          ? this.increaseGuesses()
+          ? this.increaseGuesses(result)
           : console.log('game ends, you found the assassin!')
       )
   }
@@ -89,32 +89,33 @@ class GameContainer extends Component {
     fetch(gamesUrl + `/${this.state.gameId}`)
       .then(resp => resp.json())
       .then(game => {
-        const orderedTiles = { ...game, tiles: game.tiles.sort((a, b) => a.id - b.id) }
+        const orderedTiles = {
+          ...game,
+          tiles: game.tiles.sort((a, b) => a.id - b.id)
+        }
         return orderedTiles
       })
 
   findTileOnServer = tile =>
     this.getGame().then(game => game.tiles.find(t => t.id === tile.id))
 
-  checkTileColor = selectedTile => {
+  checkTileColorAndCalculateScore = selectedTile => {
     switch (selectedTile.color) {
       case this.state.activeTeam:
-        console.log("Correct guess!")
+        console.log('Correct guess!')
         this.addScore(this.state.activeTeam)
-        return true // pass back to handleTileSelect to increaseGuesses etc
+        return 'continue' // pass back to handleTileSelect to increaseGuesses etc
       case swapTeam[this.state.activeTeam]:
-        console.log("Wrong guess: enemy tile!")
+        console.log('Wrong guess: enemy tile!')
         this.addScore(swapTeam[this.state.activeTeam])
-        this.endTurn()
-        return true
+        return 'endTurn'
+      case 'yellow':
+        //yellow tile
+        console.log('Wrong guess: neutral tile')
+        return 'endTurn'
       case 'assassin':
         console.log('You picked the assassin.')
         return false
-      default:
-        //yellow tile
-        console.log('Wrong guess: neutral tile')
-        this.endTurn()
-        return true
     }
   }
 
@@ -125,10 +126,15 @@ class GameContainer extends Component {
     })
   }
 
-  increaseGuesses = () => {
+  increaseGuesses = result => {
     const guesses = this.state.guesses + 1
     this.setState({ guesses })
-    if (!(guesses <= parseInt(this.state.clue['numberClue'], 10))) {
+    if (
+      result === 'continue' &&
+      !(guesses <= parseInt(this.state.clue['numberClue'], 10))
+    ) {
+      this.endTurn()
+    } else if (result === 'endTurn') {
       this.endTurn()
     }
   }
@@ -146,8 +152,8 @@ class GameContainer extends Component {
 
   restoreSpymasterView = game => {
     // instead of overwriting the tiles, we keep their revealedColor property that we added on game start.
-    const tiles = [ ...this.state.tiles ]
-    tiles.forEach((tile, i) => tile.color = game.tiles[i].color)
+    const tiles = [...this.state.tiles]
+    tiles.forEach((tile, i) => (tile.color = game.tiles[i].color))
 
     this.setState({
       tiles,
@@ -169,7 +175,6 @@ class GameContainer extends Component {
   // });
 
   handleBomb = () => {
-    console.log("Time's up! Next view.")
     this.swapTeam()
     if (this.state.spymasterView) {
       //spymaster's turn but didn't give clue, swap team and keep spymasterview
