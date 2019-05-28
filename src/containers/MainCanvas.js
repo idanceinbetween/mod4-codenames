@@ -23,6 +23,7 @@ const MainCanvas = () => {
             <Route exact path='/' component={HomeContainer} />
             <Route exact path='/games' component={GameContainer} />
             <Route exact path='/about' render={About} />
+            {/* <Route exact path='/wordman' render={WordManager} /> */}
             <Route
               component={() => (
                 <h1>

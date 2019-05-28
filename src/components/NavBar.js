@@ -15,6 +15,10 @@ const NavBar = () => (
     <NavLink to='/about' exact>
       About
     </NavLink>
+    |
+    <NavLink to='/wordman' exact>
+      Word Manager
+    </NavLink>
   </Menu>
 )
 
