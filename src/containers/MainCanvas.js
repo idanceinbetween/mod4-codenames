@@ -22,16 +22,10 @@ const MainCanvas = () => {
         <animated.div key={key} style={props}>
           <Switch location={item}>
             <Route exact path='/' component={HomeContainer} />
-            <Route exact path='/games' component={GameContainer} />
+            <Route exact path='/play' component={GameContainer} />
             <Route exact path='/about' render={About} />
             <Route exact path='/wordman' component={WordManager} />
-            <Route
-              component={() => (
-                <h1>
-                  404 Not Found and this is shown in the (APP's second half)
-                </h1>
-              )}
-            />
+            <Route component={() => <img src={require('../pix/404.jpg')} />} />
           </Switch>
         </animated.div>
       ))}
