@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import './App.css'
 import NavBar from './components/NavBar'
 import MainCanvas from './containers/MainCanvas'
-import { BrowserRouter as Prompt } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Link, Prompt } from 'react-router-dom'
 
 class App extends Component {
   state = {
@@ -29,7 +29,7 @@ class App extends Component {
         />
         <Prompt
           when={isBlocking}
-          message={() => `Are you sure you want to leave game?`}
+          message={'Are you sure you want to leave current game?'}
         />
       </div>
     )
