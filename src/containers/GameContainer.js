@@ -218,7 +218,7 @@ class GameContainer extends Component {
 
     return (
       <AbsoluteWrapper>
-        <Grid columns={4} centered>
+        <Grid columns={3} textAlign='center' verticalAlign='top'>
           <Grid.Row verticalAlign='top'>
             <Grid.Column width={3}>
               <Scoreboard scores={scores} />
@@ -244,7 +244,7 @@ class GameContainer extends Component {
                 handleTileSelect={tile => this.handleTileSelect(tile)}
               />
             </Grid.Column>
-            <Grid.Column width={3}>
+            <Grid.Column width={2}>
               <Timer
                 timer={timer}
                 runTimer={this.state.runTimer}

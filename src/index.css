@@ -65,23 +65,23 @@ body {
 }
 
 .cards.ui .card.tile.wcn {
-  background-image: url('pix/white.jpg');
+  background-image: url('img/white.jpg');
 }
 
 .cards.ui .card.tile.red {
-  background-image: url('pix/red.jpg');
+  background-image: url('img/red.jpg');
 }
 
 .cards.ui .card.tile.blue {
-  background-image: url('pix/blue.jpg');
+  background-image: url('img/blue.jpg');
 }
 
 .cards.ui .card.tile.yellow {
-  background-image: url('pix/yellow.jpg');
+  background-image: url('img/yellow.jpg');
 }
 
 .cards.ui .card.tile.assassin {
-  background-image: url('pix/assassin.jpg');
+  background-image: url('img/assassin.jpg');
 }
 
 .ui.page.modals.dimmer.transition.visible.active {
