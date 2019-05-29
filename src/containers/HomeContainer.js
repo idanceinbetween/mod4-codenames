@@ -15,13 +15,12 @@ class HomeContainer extends Component {
     return (
       <AbsoluteWrapper>
         <Grid divided='vertically'>
-          <Grid.Row columns={2}>
-            <Grid.Column>
+          <Grid.Row columns={3}>
+            <Grid.Column width={3} />
+            <Grid.Column width={10}>
               <HowToPlay />
             </Grid.Column>
-            <Grid.Column>
-              <StartPlay />
-            </Grid.Column>
+            <Grid.Column width={3} />
           </Grid.Row>
         </Grid>
       </AbsoluteWrapper>

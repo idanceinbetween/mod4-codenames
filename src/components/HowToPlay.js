@@ -1,10 +1,13 @@
-import React from 'react'
+import React, { Fragment } from 'react'
+import { Link } from 'react-router-dom'
+import { Button } from 'semantic-ui-react'
+import { Segment } from 'semantic-ui-react'
 
 const HowToPlay = () => {
   return (
-    <div>
-      <h1>How to Play Codenames</h1>
-      <div align='justify'>
+    <Fragment>
+      <Segment raised textAlign='left'>
+        <h1>How to Play Codenames</h1>
         <p>
           You are a spy and I need your help. We need to contact all our agents
           in the field via their special codenames, but I can only give you one
@@ -43,8 +46,14 @@ const HowToPlay = () => {
           up on. Spymasters must not communicate in any way other than a clue
           and a number.
         </p>
-      </div>
-    </div>
+      </Segment>
+      <Fragment>
+        <h1>DO NOT CLICK UNLESS YOU ARE A SPYMASTER</h1>
+        <Link centered to='/play'>
+          <Button>Start new game</Button>
+        </Link>
+      </Fragment>
+    </Fragment>
   )
 }
 

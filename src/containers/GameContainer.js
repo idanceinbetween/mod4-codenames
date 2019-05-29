@@ -255,7 +255,10 @@ class GameContainer extends Component {
     this.swapTeam()
     if (this.state.spymasterView) {
       //spymaster's turn but didn't give clue, swap team and keep spymasterview
-      this.setState({ timer: rules.timer })
+      this.setState({
+        timer: rules.timer,
+        logMessage: 'Time up, team swapped!'
+      })
     } else {
       //players turn, didn't pick card, swap team and change to spymasterview
       this.getGame().then(game => this.restoreSpymasterView(game))
