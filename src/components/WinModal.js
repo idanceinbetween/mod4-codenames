@@ -6,8 +6,15 @@ const swapTeam = {
   red: 'BLUE'
 }
 
-const SwapViewModal = props => {
+const redBg = {
+  "background-color": "rgba(255,0,0,.5)"
+}
 
+const blueBg = {
+  "background-color": "rgba(0,0,255,.5)"
+}
+
+const WinModal = props => {
   return (
     <Modal
       open={props.openModal}
@@ -15,24 +22,28 @@ const SwapViewModal = props => {
       basic
       size='large'
       centered
+      style={props.winner === 'red' ? redBg : blueBg}
     >
       <Modal.Content>
         <h2 align='center'>{props.logMessage}</h2>
         <h1 align='center'>
-          {`Team ${props.activeTeam.toUpperCase()}, your turn has ended.`}
+          All {props.winner} code words found.
           <br />
-          Spymaster of team {swapTeam[props.activeTeam]}
+          TEAM {props.winner.toUpperCase()} WINS! Congratulations!
           <br />
-          PLEASE SHOW YOURSELF NOW!
+          Ready to start a new game?
         </h1>
       </Modal.Content>
       <Modal.Actions>
         <Button onClick={props.closeModal} inverted>
-          <Icon name='checkmark' /> I'm here!
+          <Icon name='user secret' /> View board
+        </Button>
+        <Button onClick={props.startNewGame} inverted>
+          <Icon name='gamepad' /> Start new game
         </Button>
       </Modal.Actions>
     </Modal>
   )
 }
 
-export default SwapViewModal
+export default WinModal

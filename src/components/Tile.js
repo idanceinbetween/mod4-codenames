@@ -12,10 +12,10 @@ class Tile extends Component {
   }
 
   render() {
-    const { tile } = this.props
+    const { tile, frozen } = this.props
     return (
       <Fragment>
-        {!this.state.hit ? ( //check if card is not hit yet
+        {!this.state.hit && !frozen ? ( //check if card is not hit yet
           <Card
             className={`cnWord tile ${this.props.color} blackText`}
             onClick={this.checkSelect}
