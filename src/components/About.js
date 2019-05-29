@@ -1,7 +1,6 @@
 import React from 'react'
 import { Grid, Image, Segment, Icon } from 'semantic-ui-react'
 import AbsoluteWrapper from '../components/AbsoluteWrapper'
-import { Link } from 'react-router-dom'
 
 const About = () => (
   <AbsoluteWrapper>
@@ -19,27 +18,30 @@ const About = () => (
                 bootcamp where we focused on creating React.
               </p>
               <h2>Technical Details </h2>
-              <p>
-                The app has:
-                <ul>
-                  <li>a React frontend</li>
-                  <li>a Rails API backend</li>
-                  <li>at least three resources on the backend</li>
-                  <li>full CRUD actions for at least one resource</li>
-                  <li>has two different client-side routes</li>
-                </ul>
-              </p>
+              <p>The app has:</p>
+              <ul>
+                <li>a React frontend</li>
+                <li>a Rails API backend</li>
+                <li>at least three resources on the backend</li>
+                <li>full CRUD actions for at least one resource</li>
+                <li>has two different client-side routes</li>
+              </ul>
               <h2>Authors</h2>
               <p>
                 Diogo Costa (
                 <a
                   href='https://github.com/industriousparadigm'
                   target='_blank'
+                  rel='noopener noreferrer'
                 >
                   @industriousparadigm
                 </a>
                 ) and JiaXuan Hon (
-                <a href='https://github.com/idanceinbetween/' target='_blank'>
+                <a
+                  href='https://github.com/idanceinbetween/'
+                  target='_blank'
+                  rel='noopener noreferrer'
+                >
                   @idanceinbetween
                 </a>
                 ) from Inglorious BA$Hterds (aka 031119 cohort), Flatiron
@@ -52,8 +54,12 @@ const About = () => (
             <Segment textAlign='left'>
               <h1>
                 About Codenames{' '}
-                <a href='https://czechgames.com/en/codenames/' target='_blank'>
-                  <Icon link name='external alternate' />
+                <a
+                  href='https://czechgames.com/en/codenames/'
+                  target='_blank'
+                  rel='noopener noreferrer'
+                >
+                  <Icon link name='external' />
                 </a>
               </h1>
               <p>

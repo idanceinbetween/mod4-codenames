@@ -1,5 +1,5 @@
 import React from 'react'
-import { Header, Image, Table } from 'semantic-ui-react'
+import { Table } from 'semantic-ui-react'
 
 const Scoreboard = props => (
   <Table fixed celled basic='very' textAlign='center' verticalAlign='middle'>
@@ -17,6 +17,7 @@ const Scoreboard = props => (
             src={require('../img/team_red.jpg')}
             width='33px'
             height='33px'
+            alt='Red team icon'
           />
         </Table.Cell>
         <Table.Cell>
@@ -29,6 +30,7 @@ const Scoreboard = props => (
             src={require('../img/team_blue.jpg')}
             width='33px'
             height='33px'
+            alt='Blue team icon'
           />
         </Table.Cell>
         <Table.Cell>

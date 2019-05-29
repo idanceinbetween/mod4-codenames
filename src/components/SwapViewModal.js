@@ -26,7 +26,7 @@ const SwapViewModal = props => {
         </h1>
       </Modal.Content>
       <Modal.Actions>
-        <Button color='white' onClick={props.closeModal} inverted>
+        <Button color='grey' onClick={props.closeModal} inverted>
           <Icon name='checkmark' /> I'm here!
         </Button>
       </Modal.Actions>

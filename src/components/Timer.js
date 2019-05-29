@@ -72,7 +72,7 @@ class Timer extends Component {
         )}
         {this.state.timer <= 3 && (
           <Fragment>
-            <h1 style={{ 'background-color': '#db2828', color: 'white' }}>
+            <h1 style={{ backgroundColor: '#db2828', color: 'white' }}>
               {parseInt(timer / 60)}:
               {parseInt(timer % 60) < 10
                 ? '0' + parseInt(timer % 60)

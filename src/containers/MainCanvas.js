@@ -25,7 +25,14 @@ const MainCanvas = () => {
             <Route exact path='/play' component={GameContainer} />
             <Route exact path='/about' render={About} />
             <Route exact path='/wordman' component={WordManager} />
-            <Route component={() => <img src={require('../img/404.jpg')} />} />
+            <Route
+              component={() => (
+                <img
+                  src={require('../img/404.jpg')}
+                  alt='404 Page not found error'
+                />
+              )}
+            />
           </Switch>
         </animated.div>
       ))}
