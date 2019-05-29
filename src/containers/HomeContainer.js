@@ -8,6 +8,9 @@ class HomeContainer extends Component {
   state = {
     startGame: false
   }
+  componentDidMount() {
+    this.props.deactivateBlock()
+  }
   render() {
     return (
       <AbsoluteWrapper>

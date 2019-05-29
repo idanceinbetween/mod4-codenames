@@ -45,6 +45,7 @@ class GameContainer extends Component {
 
   componentDidMount() {
     this.startNewGame()
+    this.props.activateBlock()
   }
 
   startNewGame = () => {
@@ -65,8 +66,8 @@ class GameContainer extends Component {
     const blueTiles = tiles.filter(w => w.color === 'blue')
     const redTiles = tiles.filter(w => w.color === 'red')
     blueTiles.length > redTiles.length
-      ? activeTeam = 'blue'
-      : activeTeam = 'red'
+      ? (activeTeam = 'blue')
+      : (activeTeam = 'red')
     const first = activeTeam
     this.setState({
       tiles,
@@ -163,26 +164,29 @@ class GameContainer extends Component {
 
   addScore = team => {
     const score = this.state.scores[team] + 1
-    this.setState({
-      scores: { ...this.state.scores, [team]: score }
-    }, () => {
-      this.checkWinner()
-    })
+    this.setState(
+      {
+        scores: { ...this.state.scores, [team]: score }
+      },
+      () => {
+        this.checkWinner()
+      }
+    )
   }
 
   checkWinner = () => {
     const { scores, first, winner } = this.state
     // check if red won
     if (scores.red > 8) {
-      this.setState({ winner: "red" })
+      this.setState({ winner: 'red' })
     } else if (scores.red > 7) {
-      first !== "red" && this.setState({ winner: "red" })
+      first !== 'red' && this.setState({ winner: 'red' })
     }
     // check if blue won
     if (scores.blue > 8) {
-      this.setState({ winner: "blue" })
+      this.setState({ winner: 'blue' })
     } else if (scores.blue > 7) {
-      first !== "blue" && this.setState({ winner: "blue" })
+      first !== 'blue' && this.setState({ winner: 'blue' })
     }
 
     if (winner) {
@@ -216,7 +220,7 @@ class GameContainer extends Component {
       this.setState({ runTimer: true })
       this.swapTeam()
     }
-    this.getGame().then(game => this.restoreSpymasterView(game))  
+    this.getGame().then(game => this.restoreSpymasterView(game))
   }
 
   swapTeam = () => {
@@ -287,7 +291,7 @@ class GameContainer extends Component {
       guesses,
       openModal,
       winner,
-      assassin,
+      assassin
     } = this.state
 
     return (
@@ -341,30 +345,30 @@ class GameContainer extends Component {
           </Grid.Row>
         </Grid>
 
-        {
-          winner
-            ? <WinModal 
-                winner={winner}
-                openModal={openModal}
-                closeModal={this.closeModal}
-                logMessage={logMessage}
-                startNewGame={this.startNewGame}
-              />
-            : assassin
-                ? <GameOverModal 
-                    activeTeam={activeTeam}
-                    openModal={openModal}
-                    closeModal={this.closeModal}
-                    logMessage={logMessage}
-                    startNewGame={this.startNewGame}
-                  />
-                : <SwapViewModal
-                    activeTeam={activeTeam}
-                    openModal={openModal}
-                    closeModal={this.closeModal}
-                    logMessage={logMessage}
-                  />
-        }
+        {winner ? (
+          <WinModal
+            winner={winner}
+            openModal={openModal}
+            closeModal={this.closeModal}
+            logMessage={logMessage}
+            startNewGame={this.startNewGame}
+          />
+        ) : assassin ? (
+          <GameOverModal
+            activeTeam={activeTeam}
+            openModal={openModal}
+            closeModal={this.closeModal}
+            logMessage={logMessage}
+            startNewGame={this.startNewGame}
+          />
+        ) : (
+          <SwapViewModal
+            activeTeam={activeTeam}
+            openModal={openModal}
+            closeModal={this.closeModal}
+            logMessage={logMessage}
+          />
+        )}
       </AbsoluteWrapper>
     )
   }

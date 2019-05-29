@@ -7,7 +7,7 @@ import HomeContainer from './HomeContainer'
 import GameContainer from './GameContainer'
 import WordManager from '../components/WordManager'
 
-const MainCanvas = () => {
+const MainCanvas = ({ activateBlock, deactivateBlock }) => {
   const { location } = useContext(__RouterContext)
 
   const transitions = useTransition(location, location => location.pathname, {
@@ -21,10 +21,41 @@ const MainCanvas = () => {
       {transitions.map(({ item, props, key }) => (
         <animated.div key={key} style={props}>
           <Switch location={item}>
-            <Route exact path='/' component={HomeContainer} />
-            <Route exact path='/play' component={GameContainer} />
-            <Route exact path='/about' render={About} />
-            <Route exact path='/wordman' component={WordManager} />
+            <Route
+              exact
+              path='/'
+              render={routerProps => (
+                <HomeContainer
+                  {...routerProps}
+                  deactivateBlock={deactivateBlock}
+                />
+              )}
+              // isBlocking={props.isBlocking}
+            />
+            <Route
+              exact
+              path='/play'
+              render={routerProps => (
+                <GameContainer {...routerProps} activateBlock={activateBlock} />
+              )}
+            />
+            <Route
+              exact
+              path='/about'
+              render={routerProps => (
+                <About {...routerProps} deactivateBlock={deactivateBlock} />
+              )}
+            />
+            <Route
+              exact
+              path='/wordman'
+              render={routerProps => (
+                <WordManager
+                  {...routerProps}
+                  deactivateBlock={deactivateBlock}
+                />
+              )}
+            />
             <Route
               component={() => (
                 <img
