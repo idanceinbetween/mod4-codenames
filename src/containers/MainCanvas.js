@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, Fragment } from 'react'
 import { Route, Switch, __RouterContext } from 'react-router-dom'
 import { useTransition, animated } from 'react-spring'
 
@@ -17,7 +17,7 @@ const MainCanvas = () => {
   })
 
   return (
-    <div>
+    <Fragment>
       {transitions.map(({ item, props, key }) => (
         <animated.div key={key} style={props}>
           <Switch location={item}>
@@ -29,7 +29,7 @@ const MainCanvas = () => {
           </Switch>
         </animated.div>
       ))}
-    </div>
+    </Fragment>
   )
 }
 
