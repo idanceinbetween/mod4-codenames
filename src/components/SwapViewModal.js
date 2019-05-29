@@ -7,6 +7,7 @@ const swapTeam = {
 }
 
 const SwapViewModal = props => {
+
   return (
     <Modal
       open={props.openModal}
@@ -18,7 +19,7 @@ const SwapViewModal = props => {
       <Modal.Content>
         <h2 align='center'>{props.logMessage}</h2>
         <h1 align='center'>
-          Team {props.activeTeam.toUpperCase()}, your turn has ended.
+          {`Team ${props.activeTeam.toUpperCase()}, your turn has ended.`}
           <br />
           Spymaster of team {swapTeam[props.activeTeam]}
           <br />
@@ -26,7 +27,7 @@ const SwapViewModal = props => {
         </h1>
       </Modal.Content>
       <Modal.Actions>
-        <Button color='white' onClick={props.closeModal} inverted>
+        <Button onClick={props.closeModal} inverted>
           <Icon name='checkmark' /> I'm here!
         </Button>
       </Modal.Actions>

@@ -35,10 +35,10 @@ const WinModal = props => {
         </h1>
       </Modal.Content>
       <Modal.Actions>
-        <Button color='white' onClick={props.closeModal} inverted>
+        <Button onClick={props.closeModal} inverted>
           <Icon name='user secret' /> View board
         </Button>
-        <Button color='white' onClick={props.startNewGame} inverted>
+        <Button onClick={props.startNewGame} inverted>
           <Icon name='gamepad' /> Start new game
         </Button>
       </Modal.Actions>

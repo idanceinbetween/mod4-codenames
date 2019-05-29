@@ -44,19 +44,23 @@ class GameContainer extends Component {
   }
 
   componentDidMount() {
-    this.startGame().then(data => {
-      this.setInitialState(data)
+    this.startNewGame()
+  }
+
+  startNewGame = () => {
+    this.createGame().then(game => {
+      this.setInitialState(game)
     })
   }
 
-  startGame = () => fetch(startUrl).then(resp => resp.json())
+  createGame = () => fetch(startUrl).then(resp => resp.json())
 
-  setInitialState = data => {
-    let { tiles } = data
+  setInitialState = game => {
+    let { tiles } = game
     // add a REVEALED_COLOR attribute to tiles so that GameContainer + GameBoard know which ones have been guessed already
     tiles.forEach(tile => (tile.revealedColor = null))
     let activeTeam = ''
-    const gameId = data.id
+    const gameId = game.id
 
     const blueTiles = tiles.filter(w => w.color === 'blue')
     const redTiles = tiles.filter(w => w.color === 'red')
@@ -76,17 +80,23 @@ class GameContainer extends Component {
       timer: rules.timer,
       runTimer: true,
       frozen: false,
-      logMessage: 'New game is under way!',
+      logMessage: 'A new game is under way!',
       openModal: false,
       winner: '',
       assassin: false
     })
   }
 
-  startNewGame = () => {
-    this.startGame().then(data => {
-      this.setInitialState(data)
-    })
+  getGame = () => {
+    return fetch(gamesUrl + `/${this.state.gameId}`)
+      .then(resp => resp.json())
+      .then(game => {
+        const orderedTiles = {
+          ...game,
+          tiles: game.tiles.sort((a, b) => a.id - b.id)
+        }
+        return orderedTiles
+      })
   }
 
   handleClueSubmit = event => {
@@ -110,28 +120,20 @@ class GameContainer extends Component {
         this.setState({ tiles })
         return this.checkTileColorAndCalculateScore(serverTile)
       })
-      .then(result =>
-        result
-          ? this.increaseGuesses(result)
-          : this.handleAssassin()
-      )
+      .then(result => {
+        if (result) {
+          this.increaseGuesses(result)
+          this.checkWinner()
+        } else {
+          this.handleAssassin()
+        }
+      })
   }
 
   handleAssassin = () => {
     this.toggleFrozen()
     this.setState({ openModal: true, assassin: true, runTimer: false })
   }
-
-  getGame = () =>
-    fetch(gamesUrl + `/${this.state.gameId}`)
-      .then(resp => resp.json())
-      .then(game => {
-        const orderedTiles = {
-          ...game,
-          tiles: game.tiles.sort((a, b) => a.id - b.id)
-        }
-        return orderedTiles
-      })
 
   findTileOnServer = tile =>
     this.getGame().then(game => game.tiles.find(t => t.id === tile.id))
@@ -163,8 +165,9 @@ class GameContainer extends Component {
     const score = this.state.scores[team] + 1
     this.setState({
       scores: { ...this.state.scores, [team]: score }
+    }, () => {
+      this.checkWinner()
     })
-    this.checkWinner()
   }
 
   checkWinner = () => {
@@ -184,8 +187,7 @@ class GameContainer extends Component {
 
     if (winner) {
       console.log(`The ${winner} team won the game!`)
-      this.toggleFrozen()
-      this.setState({ openModal: true })
+      this.setState({ openModal: true, runTimer: false }, this.toggleFrozen)
     } else {
       console.log(`No team has won yet.`)
     }
@@ -223,7 +225,6 @@ class GameContainer extends Component {
   }
 
   restoreSpymasterView = game => {
-    // instead of overwriting the tiles, we keep their revealedColor property that we added on game start.
     const tiles = [...this.state.tiles]
     tiles.forEach((tile, i) => (tile.color = game.tiles[i].color))
 
