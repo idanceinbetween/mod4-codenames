@@ -3,7 +3,7 @@ import { Card } from 'semantic-ui-react'
 
 class Tile extends Component {
   state = { hit: false, color: this.props.color }
-
+  
   checkSelect = () => {
     if (!this.props.spymasterView) {
       this.setState({ hit: true })
@@ -12,7 +12,7 @@ class Tile extends Component {
   }
 
   render() {
-    const { tile, frozen } = this.props
+    const { tile, frozen, spymasterView } = this.props
     return (
       <Fragment>
         {!this.state.hit && !frozen ? ( //check if card is not hit yet
@@ -26,9 +26,15 @@ class Tile extends Component {
           </Card>
         ) : (
           //if card is hit
-          <Card className={`cnWord tile revealed ${this.props.color}`}>
-            <Card.Header>{''}</Card.Header>
-          </Card>
+          spymasterView
+            ?
+              <Card className={`cnWord tile revealed spymasterView ${this.props.color}`}>
+                <Card.Header>{''}</Card.Header>
+              </Card>
+            :
+              <Card className={`cnWord tile revealed ${this.props.color}`}>
+                <Card.Header>{''}</Card.Header>
+              </Card>
         )}
       </Fragment>
     )

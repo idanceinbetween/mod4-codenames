@@ -71,6 +71,10 @@ body {
   background-position: center center;
 }
 
+.cards.ui.five .card.tile.spymasterView {
+  background-image: url('img/white.jpg');
+}
+
 .cards.ui .card.tile.wcn {
   background-image: url('img/white.jpg');
 }
@@ -149,7 +153,7 @@ body {
 .card .header:after {
   content: "";
   position: absolute;
-  background-color: rgba(0,0,0,0.4);
+  background-color: rgba(0,0,0,0.35);
   top:0;
   left:0;
   width: 100%;

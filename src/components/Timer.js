@@ -1,5 +1,7 @@
 import React, { Component, Fragment } from 'react'
 
+const redLine = 20
+
 class Timer extends Component {
   state = {
     timer: this.props.timer,
@@ -60,7 +62,7 @@ class Timer extends Component {
     return (
       <Fragment>
         <h2>Timer </h2>
-        {this.state.timer > 3 && (
+        {this.state.timer > redLine && (
           <Fragment>
             <h1>
               {parseInt(timer / 60)}:
@@ -70,7 +72,7 @@ class Timer extends Component {
             </h1>
           </Fragment>
         )}
-        {this.state.timer <= 3 && (
+        {this.state.timer <= redLine && (
           <Fragment>
             <h1 style={{ backgroundColor: '#db2828', color: 'white' }}>
               {parseInt(timer / 60)}:
