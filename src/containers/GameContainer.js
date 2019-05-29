@@ -8,6 +8,8 @@ import Clue from '../components/Clue'
 import Timer from '../components/Timer'
 import LogPanel from '../components/LogPanel'
 import SwapViewModal from '../components/SwapViewModal'
+import WinModal from '../components/WinModal'
+import GameOverModal from '../components/GameOverModal'
 
 const baseUrl = 'http://localhost:3007'
 const startUrl = baseUrl + '/start'
@@ -25,6 +27,7 @@ const rules = {
 class GameContainer extends Component {
   state = {
     tiles: [],
+    first: '',
     scores: { red: 0, blue: 0 },
     spymasterView: true,
     clue: { numberClue: '', textClue: '' },
@@ -33,8 +36,11 @@ class GameContainer extends Component {
     gameId: null,
     timer: rules.timer,
     runTimer: true,
+    frozen: false,
     logMessage: '',
-    openModal: false
+    openModal: false,
+    winner: '',
+    assassin: false
   }
 
   componentDidMount() {
@@ -55,10 +61,32 @@ class GameContainer extends Component {
     const blueTiles = tiles.filter(w => w.color === 'blue')
     const redTiles = tiles.filter(w => w.color === 'red')
     blueTiles.length > redTiles.length
-      ? (activeTeam = 'blue')
-      : (activeTeam = 'red')
+      ? activeTeam = 'blue'
+      : activeTeam = 'red'
+    const first = activeTeam
+    this.setState({
+      tiles,
+      first,
+      activeTeam,
+      gameId,
+      scores: { red: 0, blue: 0 },
+      spymasterView: true,
+      clue: { numberClue: '', textClue: '' },
+      guesses: 0,
+      timer: rules.timer,
+      runTimer: true,
+      frozen: false,
+      logMessage: 'New game is under way!',
+      openModal: false,
+      winner: '',
+      assassin: false
+    })
+  }
 
-    this.setState({ activeTeam, tiles, gameId })
+  startNewGame = () => {
+    this.startGame().then(data => {
+      this.setInitialState(data)
+    })
   }
 
   handleClueSubmit = event => {
@@ -85,8 +113,13 @@ class GameContainer extends Component {
       .then(result =>
         result
           ? this.increaseGuesses(result)
-          : console.log('game ends, you found the assassin!')
+          : this.handleAssassin()
       )
+  }
+
+  handleAssassin = () => {
+    this.toggleFrozen()
+    this.setState({ openModal: true, assassin: true, runTimer: false })
   }
 
   getGame = () =>
@@ -120,6 +153,9 @@ class GameContainer extends Component {
       case 'assassin':
         this.handleLogMessage('You picked the assassin. Game over!')
         return false
+      default:
+        this.handleLogMessage('Congratulations, you broke the game.')
+        return null
     }
   }
 
@@ -128,6 +164,31 @@ class GameContainer extends Component {
     this.setState({
       scores: { ...this.state.scores, [team]: score }
     })
+    this.checkWinner()
+  }
+
+  checkWinner = () => {
+    const { scores, first, winner } = this.state
+    // check if red won
+    if (scores.red > 8) {
+      this.setState({ winner: "red" })
+    } else if (scores.red > 7) {
+      first !== "red" && this.setState({ winner: "red" })
+    }
+    // check if blue won
+    if (scores.blue > 8) {
+      this.setState({ winner: "blue" })
+    } else if (scores.blue > 7) {
+      first !== "blue" && this.setState({ winner: "blue" })
+    }
+
+    if (winner) {
+      console.log(`The ${winner} team won the game!`)
+      this.toggleFrozen()
+      this.setState({ openModal: true })
+    } else {
+      console.log(`No team has won yet.`)
+    }
   }
 
   increaseGuesses = result => {
@@ -148,9 +209,12 @@ class GameContainer extends Component {
   }
 
   closeModal = () => {
-    this.setState({ openModal: false, runTimer: true })
-    this.swapTeam()
-    this.getGame().then(game => this.restoreSpymasterView(game))
+    this.setState({ openModal: false })
+    if (!this.state.frozen) {
+      this.setState({ runTimer: true })
+      this.swapTeam()
+    }
+    this.getGame().then(game => this.restoreSpymasterView(game))  
   }
 
   swapTeam = () => {
@@ -193,8 +257,12 @@ class GameContainer extends Component {
     }
   }
 
-  pauseGame = () => {
-    this.setState({ runTimer: !this.state.runTimer })
+  togglePause = () => {
+    !this.state.frozen && this.setState({ runTimer: !this.state.runTimer })
+  }
+
+  toggleFrozen = () => {
+    this.setState({ frozen: !this.state.frozen })
   }
 
   handleLogMessage = message => {
@@ -210,10 +278,15 @@ class GameContainer extends Component {
       spymasterView,
       clue,
       timer,
+      runTimer,
+      frozen,
       activeTeam,
       gameId,
       logMessage,
-      guesses
+      guesses,
+      openModal,
+      winner,
+      assassin,
     } = this.state
 
     return (
@@ -237,6 +310,8 @@ class GameContainer extends Component {
                 canGuess={parseInt(clue['numberClue'], 10) + 1}
                 guesses={guesses}
                 handleLogMessage={str => this.handleLogMessage(str)}
+                frozen={frozen}
+                startNewGame={this.startNewGame}
               />
               <GameBoard
                 tiles={tiles}
@@ -247,13 +322,13 @@ class GameContainer extends Component {
             <Grid.Column width={3}>
               <Timer
                 timer={timer}
-                runTimer={this.state.runTimer}
+                runTimer={runTimer}
                 activeTeam={activeTeam}
                 bomb={this.handleBomb}
               />
               <br />
-              <Button onClick={() => this.pauseGame()}>
-                {this.state.runTimer ? 'Pause Game' : 'Resume Game'}
+              <Button onClick={() => this.togglePause()}>
+                {runTimer ? 'Pause Game' : 'Resume Game'}
               </Button>
             </Grid.Column>
           </Grid.Row>
@@ -265,12 +340,30 @@ class GameContainer extends Component {
           </Grid.Row>
         </Grid>
 
-        <SwapViewModal
-          activeTeam={activeTeam}
-          openModal={this.state.openModal}
-          closeModal={this.closeModal}
-          logMessage={logMessage}
-        />
+        {
+          winner
+            ? <WinModal 
+                winner={winner}
+                openModal={openModal}
+                closeModal={this.closeModal}
+                logMessage={logMessage}
+                startNewGame={this.startNewGame}
+              />
+            : assassin
+                ? <GameOverModal 
+                    activeTeam={activeTeam}
+                    openModal={openModal}
+                    closeModal={this.closeModal}
+                    logMessage={logMessage}
+                    startNewGame={this.startNewGame}
+                  />
+                : <SwapViewModal
+                    activeTeam={activeTeam}
+                    openModal={openModal}
+                    closeModal={this.closeModal}
+                    logMessage={logMessage}
+                  />
+        }
       </AbsoluteWrapper>
     )
   }

@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react'
-import { Button, Form, Segment } from 'semantic-ui-react'
+import { Button, Form, Segment, Icon } from 'semantic-ui-react'
 
 class Clue extends Component {
   state = { numberClue: '', textClue: '' }
@@ -27,6 +27,8 @@ class Clue extends Component {
         this.setState({ numberClue: '', textClue: '' })
         this.props.handleClueSubmit(e)
         break
+      default:
+        break
     }
   }
 
@@ -53,48 +55,53 @@ class Clue extends Component {
 
   render() {
     const { numberClue, textClue } = this.state
-    const { spymasterView, clue, canGuess, guesses } = this.props
+    const { spymasterView, clue, canGuess, guesses, frozen, startNewGame } = this.props
 
     return (
       <Fragment>
-        {spymasterView && (
-          <Segment inverted>
-            <Form inverted onSubmit={this.handleSubmit}>
-              <Form.Group widths='equal'>
-                <Form.Input
-                  name='numberClue'
-                  placeholder="What's the number clue?"
-                  width={4}
-                  value={numberClue}
-                  onChange={this.handleChange}
-                />
-                <Form.Input
-                  name='textClue'
-                  placeholder="What's the word clue?"
-                  width={8}
-                  value={textClue}
-                  onChange={this.handleChange}
-                />
-                <Button type='submit'>Submit</Button>
-              </Form.Group>
-            </Form>
-          </Segment>
-        )}
-        {!spymasterView && (
-          <Segment.Group horizontal>
-            <Segment inverted color='olive'>
-              <h3>Number Clue:</h3> {clue.numberClue}
-            </Segment>
-            <Segment inverted color='olive'>
-              <h3>Text Clue:</h3> {clue.textClue}
-            </Segment>
-            {!isNaN(canGuess) && (
-              <Segment inverted color='teal'>
-                <h3>Remaining guesses:</h3> {canGuess - guesses}
+        {
+          !frozen
+            ? spymasterView
+                ? <Segment inverted>
+                    <Form inverted onSubmit={this.handleSubmit}>
+                      <Form.Group widths='equal'>
+                        <Form.Input
+                          name='numberClue'
+                          placeholder="What's the number clue?"
+                          width={4}
+                          value={numberClue}
+                          onChange={this.handleChange}
+                        />
+                        <Form.Input
+                          name='textClue'
+                          placeholder="What's the word clue?"
+                          width={8}
+                          value={textClue}
+                          onChange={this.handleChange}
+                        />
+                        <Button type='submit'>Submit</Button>
+                      </Form.Group>
+                    </Form>
+                  </Segment>
+                : <Segment.Group horizontal>
+                    <Segment inverted color='olive'>
+                      <h3>Number Clue:</h3> {clue.numberClue}
+                    </Segment>
+                    <Segment inverted color='green'>
+                      <h3>Text Clue:</h3> {clue.textClue}
+                    </Segment>
+                    {!isNaN(canGuess) && (
+                      <Segment inverted color='teal'>
+                        <h3>Remaining guesses:</h3> {canGuess - guesses}
+                      </Segment>
+                    )}
+                  </Segment.Group>
+            : <Segment inverted color='grey'>
+                <Button color='white' onClick={startNewGame}>
+                  <Icon name='gamepad' /> Start new game
+                </Button>
               </Segment>
-            )}
-          </Segment.Group>
-        )}
+        }
       </Fragment>
     )
   }
