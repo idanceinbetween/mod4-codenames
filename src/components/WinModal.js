@@ -1,17 +1,12 @@
 import React from 'react'
 import { Button, Icon, Modal } from 'semantic-ui-react'
 
-const swapTeam = {
-  blue: 'RED',
-  red: 'BLUE'
-}
-
 const redBg = {
-  "background-color": "rgba(255,0,0,.5)"
+  'background-color': 'rgba(255,0,0,.5)'
 }
 
 const blueBg = {
-  "background-color": "rgba(0,0,255,.5)"
+  'background-color': 'rgba(0,0,255,.5)'
 }
 
 const WinModal = props => {

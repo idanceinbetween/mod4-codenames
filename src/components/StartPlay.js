@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Input, Button, Transition } from 'semantic-ui-react'
+import { Input, Button } from 'semantic-ui-react'
 import { Link } from 'react-router-dom'
 
 class StartPlay extends Component {

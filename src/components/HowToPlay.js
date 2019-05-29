@@ -38,7 +38,7 @@ const HowToPlay = () => {
         </p>
         <p>
           If you guess incorrectly, your team’s turn is over. If you guess the
-          dreaded assassin (see picture below), you lose!
+          dreaded assassin, you lose!
         </p>
         <p>
           You must guess at least once, and you can have an extra guess (above
@@ -48,8 +48,10 @@ const HowToPlay = () => {
         </p>
       </Segment>
       <Fragment>
-        <h1>DO NOT CLICK UNLESS YOU ARE A SPYMASTER</h1>
-        <Link centered to='/play'>
+        <h1>Now, decide who are the spymasters and players.</h1>
+        <h2>Ready to play?</h2>
+        <h3>(DO NOT CLICK UNLESS YOU ARE A SPYMASTER)</h3>
+        <Link to='/play'>
           <Button>Start new game</Button>
         </Link>
       </Fragment>

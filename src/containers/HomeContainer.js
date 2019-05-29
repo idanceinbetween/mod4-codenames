@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { Grid } from 'semantic-ui-react'
 import HowToPlay from '../components/HowToPlay'
-import StartPlay from '../components/StartPlay'
 import AbsoluteWrapper from '../components/AbsoluteWrapper'
 
 class HomeContainer extends Component {
