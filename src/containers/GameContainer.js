@@ -40,6 +40,7 @@ class GameContainer extends Component {
   componentDidMount() {
     this.startGame().then(data => {
       this.setInitialState(data)
+      this.props.activateBlock()
     })
   }
 
