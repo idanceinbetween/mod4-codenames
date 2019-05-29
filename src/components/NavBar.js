@@ -1,15 +1,22 @@
 import React from 'react'
 import { Menu } from 'semantic-ui-react'
-import { NavLink, Link } from 'react-router-dom'
-
-const items = [
-  { as: NavLink, content: 'Home', to: '/' },
-  { as: NavLink, content: 'Play', to: '/play' },
-  { as: NavLink, content: 'Word Manager', to: '/wordman' },
-  { as: NavLink, content: 'About', to: '/about' }
-]
-
-const NavBar = () => <Menu items={items} />
+import { NavLink } from 'react-router-dom'
+const NavBar = () => (
+  <Menu inverted>
+    <Menu.Item as={NavLink} exact to='/' name='home'>
+      Home
+    </Menu.Item>
+    <Menu.Item as={NavLink} exact to='/play' name='play'>
+      Play
+    </Menu.Item>
+    <Menu.Item as={NavLink} exact to='/wordman' name='wordman'>
+      Word Manager
+    </Menu.Item>
+    <Menu.Item as={NavLink} exact to='/about' name='about'>
+      About
+    </Menu.Item>
+  </Menu>
+)
 
 // const NavBar = () => (
 //   <Menu>
