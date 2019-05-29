@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 
 class Timer extends Component {
   state = {
@@ -58,17 +58,29 @@ class Timer extends Component {
   render() {
     const { timer } = this.state
     return (
-      <div>
-        <p>
-          <b>Timer</b>
-        </p>
-        <p>
-          {parseInt(timer / 60)}:
-          {parseInt(timer % 60) < 10
-            ? '0' + parseInt(timer % 60)
-            : parseInt(timer % 60)}
-        </p>
-      </div>
+      <Fragment>
+        <h2>Timer </h2>
+        {this.state.timer > 3 && (
+          <Fragment>
+            <h1>
+              {parseInt(timer / 60)}:
+              {parseInt(timer % 60) < 10
+                ? '0' + parseInt(timer % 60)
+                : parseInt(timer % 60)}
+            </h1>
+          </Fragment>
+        )}
+        {this.state.timer <= 3 && (
+          <Fragment>
+            <h1 style={{ 'background-color': '#db2828', color: 'white' }}>
+              {parseInt(timer / 60)}:
+              {parseInt(timer % 60) < 10
+                ? '0' + parseInt(timer % 60)
+                : parseInt(timer % 60)}
+            </h1>
+          </Fragment>
+        )}
+      </Fragment>
     )
   }
 }
