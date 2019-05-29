@@ -20,11 +20,13 @@ class Tile extends Component {
             className={`cnWord tile ${this.props.color} blackText`}
             onClick={this.checkSelect}
           >
-            <Card.Header>{tile.word}</Card.Header>
+            <Card.Header>
+              <p>{tile.word}</p>
+            </Card.Header>
           </Card>
         ) : (
           //if card is hit
-          <Card className={`cnWord tile ${this.props.color}`}>
+          <Card className={`cnWord tile revealed ${this.props.color}`}>
             <Card.Header>{''}</Card.Header>
           </Card>
         )}
