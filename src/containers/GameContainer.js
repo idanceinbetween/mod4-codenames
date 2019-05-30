@@ -477,7 +477,7 @@ class GameContainer extends Component {
           playStatus={this.state.ambientSound ? Sound.status.PLAYING : Sound.status.STOPPED}
           onPlaying={this.handleSongPlaying}
           loop={true}
-          volume={10}
+          volume={15}
         />
 
       </AbsoluteWrapper>
