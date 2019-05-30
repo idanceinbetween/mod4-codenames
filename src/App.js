@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import './App.css'
 import NavBar from './components/NavBar'
 import MainCanvas from './containers/MainCanvas'
-import { BrowserRouter as Prompt } from 'react-router-dom'
+import { Prompt } from 'react-router-dom'
 
 class App extends Component {
   state = {
