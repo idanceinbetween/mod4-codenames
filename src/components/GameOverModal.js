@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Icon, Modal } from 'semantic-ui-react'
+import { Button, Icon, Modal, Image } from 'semantic-ui-react'
 
 const swapTeam = {
   blue: 'RED',
@@ -11,6 +11,8 @@ const style = {
 }
 
 const GameOverModal = props => {
+  const images = require.context('../img', true);
+  const assassinImage = images('./assassin.jpg')
   return (
     <Modal
       open={props.openModal}
@@ -21,6 +23,8 @@ const GameOverModal = props => {
       style={style}
     >
       <Modal.Content>
+        <Image src={assassinImage} size="small" floated='left' rounded="true" verticalAlign="middle" />
+        <Image src={assassinImage} size="small" floated='right' rounded="true" verticalAlign="middle" />
         <h2 align='center'>{props.logMessage}</h2>
         <h1 align='center'>
           Team {props.activeTeam.toUpperCase()}, you picked the assassin.

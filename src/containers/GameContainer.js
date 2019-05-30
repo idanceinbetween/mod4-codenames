@@ -4,6 +4,7 @@ import { Grid, Button } from 'semantic-ui-react'
 import Sound from 'react-sound'
 import goodHitSound from '../sound/codecopen.wav'
 import badHitSound from '../sound/doorbuzz.wav'
+import spottedSound from '../sound/foundshort.wav'
 import assassinSound from '../sound/gameover.wav'
 import victorySound from '../sound/levelcomplete.mp3'
 import ambientSound from '../sound/ambient.mp3'
@@ -28,7 +29,7 @@ const swapTeam = {
 }
 
 const rules = {
-  timer: 120
+  timer: 15
 }
 
 class GameContainer extends Component {
@@ -155,21 +156,29 @@ class GameContainer extends Component {
   checkTileColorAndCalculateScore = selectedTile => {
     switch (selectedTile.color) {
       case this.state.activeTeam:
-        !this.state.winner && this.setState({ goodHitSound: true })
+        !this.state.winner && this.setState({ goodHitSound: false }, () => {
+          this.setState({ goodHitSound: true })
+        })
         this.handleLogMessage('Hit!')
         this.addScore(this.state.activeTeam)
         return 'continue' // pass back to handleTileSelect to increaseGuesses etc
       case swapTeam[this.state.activeTeam]:
-        this.setState({ badHitSound: true })
+        this.setState({ goodHitSound: false }, () => {
+          this.setState({ badHitSound: true })
+        })
         this.handleLogMessage('Wrong guess: enemy tile!')
         this.addScore(swapTeam[this.state.activeTeam])
         return 'endTurn'
       case 'yellow':
-        this.setState({ badHitSound: true })
+        this.setState({ goodHitSound: false }, () => {
+          this.setState({ badHitSound: true })
+        })
         this.handleLogMessage('Wrong guess: neutral tile.')
         return 'endTurn'
       case 'assassin':
-        this.setState({ assassinSound: true, ambientSound: false })
+        this.setState({ goodHitSound: false, ambientSound: false }, () => {
+          this.setState({ spottedSound: true })
+        })
         this.handleLogMessage('You picked the assassin. Game over!')
         return false
       default:
@@ -207,7 +216,7 @@ class GameContainer extends Component {
 
     if (winner) {
       this.setState({ victorySound: true, ambientSound: false })
-      console.log(`The ${winner} team won the game!`)
+      this.handleLogMessage(`The ${winner} team won the game!`)
       this.setState({ openModal: true, runTimer: false }, this.toggleFrozen)
     } else {
       console.log(`No team has won yet.`)
@@ -269,17 +278,20 @@ class GameContainer extends Component {
   // });
 
   handleBomb = () => {
-    this.swapTeam()
     if (this.state.spymasterView) {
       //spymaster's turn but didn't give clue, swap team and keep spymasterview
       this.setState({
+        openModal: true,
+        runTimer: false,
         timer: rules.timer,
-        logMessage: 'Time up, team swapped!'
+        logMessage: 'Time up, team swapped!',
+        spymasterView: false
       })
     } else {
       //players turn, didn't pick card, swap team and change to spymasterview
-      this.getGame().then(game => this.restoreSpymasterView(game))
+      this.setState({ runTimer: false, openModal: true })
     }
+    
   }
 
   togglePause = () => {
@@ -310,6 +322,10 @@ class GameContainer extends Component {
 
   handleVictorySoundEnd = () => {
     this.setState({ victorySound: false })
+  }
+
+  handleSpottedSoundEnd = () => {
+    this.setState({ spottedSound: false, assassinSound: true })
   }
 
   render() {
@@ -417,10 +433,16 @@ class GameContainer extends Component {
           onFinishedPlaying={this.handleBadHitSoundEnd}
         />
         <Sound
+          url={spottedSound}
+          playStatus={this.state.spottedSound ? Sound.status.PLAYING : Sound.status.STOPPED}
+          onFinishedPlaying={this.handleSpottedSoundEnd}
+        />
+        <Sound
           url={assassinSound}
           playStatus={this.state.assassinSound ? Sound.status.PLAYING : Sound.status.STOPPED}
           onFinishedPlaying={this.handleAssassinSoundEnd}
         />
+
         <Sound
           url={victorySound}
           playStatus={this.state.victorySound ? Sound.status.PLAYING : Sound.status.STOPPED}
