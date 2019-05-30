@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Icon, Modal, Image } from 'semantic-ui-react'
+import { Button, Icon, Modal } from 'semantic-ui-react'
 
 const swapTeam = {
   blue: 'RED',
@@ -12,19 +12,6 @@ const swapColor = {
 }
 
 const SwapViewModal = props => {
-  const images = require.context('../img', true);
-  let teamImage
-
-  switch (props.activeTeam) {
-    case 'red':
-      teamImage = images('./blue.jpg')
-      break
-    case 'blue':
-      teamImage = images('./red.jpg')
-      break
-    default:
-      teamImage = images('./yellow.jpg')
-  }
 
   return (
     <Modal
