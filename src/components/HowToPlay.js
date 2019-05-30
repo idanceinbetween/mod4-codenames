@@ -1,13 +1,16 @@
 import React, { Fragment } from 'react'
 import { Link } from 'react-router-dom'
-import { Button } from 'semantic-ui-react'
-import { Segment } from 'semantic-ui-react'
+import { Button, Segment, Image } from 'semantic-ui-react'
 
 const HowToPlay = () => {
+  const images = require.context('../img', true);
+  const gameImage = images('./codenames.jpg')
+
   return (
     <Fragment>
-      <Segment raised textAlign='left'>
+      <Segment raised textAlign='left' clearing>
         <h1>How to Play Codenames</h1>
+        <Image src={gameImage} size="medium" floated='right' spaced />
         <p>
           You are a spy and I need your help. We need to contact all our agents
           in the field via their special codenames, but I can only give you one

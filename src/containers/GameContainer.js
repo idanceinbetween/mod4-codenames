@@ -29,7 +29,7 @@ const swapTeam = {
 }
 
 const rules = {
-  timer: 15
+  timer: 120
 }
 
 class GameContainer extends Component {
@@ -294,6 +294,21 @@ class GameContainer extends Component {
     
   }
 
+  handlePass = () => {
+    const { spymasterView, activeTeam } = this.state
+    if (spymasterView) {
+      this.setState({
+        openModal: true,
+        runTimer: false,
+        timer: rules.timer,
+        logMessage: `Team ${activeTeam} has passed.`,
+        spymasterView: false
+      })
+    } else {
+      this.setState({ runTimer: false, openModal: true })
+    }
+  }
+
   togglePause = () => {
     !this.state.frozen && this.setState({ runTimer: !this.state.runTimer })
   }
@@ -384,9 +399,15 @@ class GameContainer extends Component {
                 bomb={this.handleBomb}
               />
               <br />
-              <Button onClick={() => this.togglePause()}>
-                {runTimer ? 'Pause Game' : 'Resume Game'}
-              </Button>
+              {/* Uncomment the below to enable pausing timer */}
+              {/* <Button onClick={this.togglePause}>
+                {runTimer ? 'Pause Timer' : 'Resume Timer'}
+              </Button> */}
+              {
+                this.state.frozen
+                  ? <Button onClick={this.handlePass} color='teal' disabled>{'End turn'}</Button>
+                  : <Button onClick={this.handlePass} color='teal'>{'End turn'}</Button>
+              }
             </Grid.Column>
           </Grid.Row>
 
@@ -436,17 +457,20 @@ class GameContainer extends Component {
           url={spottedSound}
           playStatus={this.state.spottedSound ? Sound.status.PLAYING : Sound.status.STOPPED}
           onFinishedPlaying={this.handleSpottedSoundEnd}
+          volume={85}
         />
         <Sound
           url={assassinSound}
           playStatus={this.state.assassinSound ? Sound.status.PLAYING : Sound.status.STOPPED}
           onFinishedPlaying={this.handleAssassinSoundEnd}
+          volume={85}
         />
 
         <Sound
           url={victorySound}
           playStatus={this.state.victorySound ? Sound.status.PLAYING : Sound.status.STOPPED}
           onFinishedPlaying={this.handleVictorySoundEnd}
+          volume={85}
         />
         <Sound
           url={ambientSound}
