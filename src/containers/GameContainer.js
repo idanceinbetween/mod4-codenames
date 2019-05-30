@@ -1,6 +1,13 @@
 import React, { Component } from 'react'
 import { Grid, Button } from 'semantic-ui-react'
 
+import Sound from 'react-sound'
+import goodHitSound from '../sound/codecopen.wav'
+import badHitSound from '../sound/doorbuzz.wav'
+import assassinSound from '../sound/gameover.wav'
+import victorySound from '../sound/levelcomplete.mp3'
+import ambientSound from '../sound/ambient.mp3'
+
 import AbsoluteWrapper from '../components/AbsoluteWrapper'
 import GameBoard from '../components/GameBoard'
 import Scoreboard from '../components/Scoreboard'
@@ -21,7 +28,7 @@ const swapTeam = {
 }
 
 const rules = {
-  timer: 15
+  timer: 120
 }
 
 class GameContainer extends Component {
@@ -40,7 +47,12 @@ class GameContainer extends Component {
     logMessage: '',
     openModal: false,
     winner: '',
-    assassin: false
+    assassin: false,
+    goodHitSound: false,
+    badHitSound: false,
+    assassinSound: false,
+    victorySound: false,
+    ambientSound: false
   }
 
   componentDidMount() {
@@ -84,7 +96,8 @@ class GameContainer extends Component {
       logMessage: 'A new game is under way!',
       openModal: false,
       winner: '',
-      assassin: false
+      assassin: false,
+      ambientSound: true
     })
   }
 
@@ -142,18 +155,21 @@ class GameContainer extends Component {
   checkTileColorAndCalculateScore = selectedTile => {
     switch (selectedTile.color) {
       case this.state.activeTeam:
+        !this.state.winner && this.setState({ goodHitSound: true })
         this.handleLogMessage('Hit!')
         this.addScore(this.state.activeTeam)
         return 'continue' // pass back to handleTileSelect to increaseGuesses etc
       case swapTeam[this.state.activeTeam]:
+        this.setState({ badHitSound: true })
         this.handleLogMessage('Wrong guess: enemy tile!')
         this.addScore(swapTeam[this.state.activeTeam])
         return 'endTurn'
       case 'yellow':
-        //yellow tile
+        this.setState({ badHitSound: true })
         this.handleLogMessage('Wrong guess: neutral tile.')
         return 'endTurn'
       case 'assassin':
+        this.setState({ assassinSound: true, ambientSound: false })
         this.handleLogMessage('You picked the assassin. Game over!')
         return false
       default:
@@ -190,6 +206,7 @@ class GameContainer extends Component {
     }
 
     if (winner) {
+      this.setState({ victorySound: true, ambientSound: false })
       console.log(`The ${winner} team won the game!`)
       this.setState({ openModal: true, runTimer: false }, this.toggleFrozen)
     } else {
@@ -279,6 +296,22 @@ class GameContainer extends Component {
     this.setState({ logMessage })
   }
 
+  handleGoodHitSoundEnd = () => {
+    this.setState({ goodHitSound: false })
+  }
+
+  handleBadHitSoundEnd = () => {
+    this.setState({ badHitSound: false })
+  }
+
+  handleAssassinSoundEnd = () => {
+    this.setState({ assassinSound: false })
+  }
+
+  handleVictorySoundEnd = () => {
+    this.setState({ victorySound: false })
+  }
+
   render() {
     const {
       tiles,
@@ -347,7 +380,7 @@ class GameContainer extends Component {
             <Grid.Column width={3}> </Grid.Column>
           </Grid.Row>
         </Grid>
-
+        {/* Modals below */}
         {winner ? (
           <WinModal
             winner={winner}
@@ -372,6 +405,35 @@ class GameContainer extends Component {
             logMessage={logMessage}
           />
         )}
+        {/* Sounds below */}
+        <Sound
+          url={goodHitSound}
+          playStatus={this.state.goodHitSound ? Sound.status.PLAYING : Sound.status.STOPPED}
+          onFinishedPlaying={this.handleGoodHitSoundEnd}
+        />
+        <Sound
+          url={badHitSound}
+          playStatus={this.state.badHitSound ? Sound.status.PLAYING : Sound.status.STOPPED}
+          onFinishedPlaying={this.handleBadHitSoundEnd}
+        />
+        <Sound
+          url={assassinSound}
+          playStatus={this.state.assassinSound ? Sound.status.PLAYING : Sound.status.STOPPED}
+          onFinishedPlaying={this.handleAssassinSoundEnd}
+        />
+        <Sound
+          url={victorySound}
+          playStatus={this.state.victorySound ? Sound.status.PLAYING : Sound.status.STOPPED}
+          onFinishedPlaying={this.handleVictorySoundEnd}
+        />
+        <Sound
+          url={ambientSound}
+          playStatus={this.state.ambientSound ? Sound.status.PLAYING : Sound.status.STOPPED}
+          onPlaying={this.handleSongPlaying}
+          loop={true}
+          volume={10}
+        />
+
       </AbsoluteWrapper>
     )
   }
